@@ -4,9 +4,16 @@ Sonic Bike Audio Engine
 An audio playback mechanism written with openframeworks. Uses OSC, multichannel audio. Devised for the Sonic Bike project. www.sonicbikes.net
 
 Currently Tested and working with:
-OpenFrameworks v0.8.4 linux64 release
-Beaglebone black
-Arch Linux
+
+- OpenFrameworks v0.8.4 linux64 release
+- Beaglebone black
+- Arch Linux
+
+Utalises the ofxJSON addon from: https://github.com/jefftimesten/ofxJSON<br />
+Be sure to download and add to OF addon directory. Just <br />
+
+    $ cd pathtoopenframeworks/addons 
+    $ git clone https://github.com/jefftimesten/ofxJSON.git
 
 License
 =====================
