@@ -19,6 +19,8 @@ class ofApp : public ofBaseApp{
 		void update();
         
         //------------------------OSC control
+        string audiodirectory;
+        string startupsound; 
 		ofxOscReceiver receiver;
         // ofImage receivedImage; // TODO: Placeholder: Enable audo file transmission
 

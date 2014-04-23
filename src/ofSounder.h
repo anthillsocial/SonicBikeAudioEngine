@@ -16,6 +16,7 @@ class ofSounder {
 		ofSounder(string soundfile);
 
 		// variables
+		string audiodirectory;
 		float speedX;
 		float speedY;
         string soundfile;

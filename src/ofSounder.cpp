@@ -1,10 +1,11 @@
 #include "ofSounder.h"
 // try: http://forum.openframeworks.cc/t/tonic-a-refreshingly-crisp-c-audio-patching-library/12923/12
-ofSounder::ofSounder(string _soundfile)
+ofSounder::ofSounder(string _soundfile, string _audiodirectory)
 {   
     // Setup some base variables
 	speedX = ofRandom(-1, 1);
 	speedY = ofRandom(-1, 1);	
+	audiodirectory = _audiodirectory;
 	soundfile = _soundfile;
     // And get the sound going
 	mysound.loadSound(soundfile);
@@ -35,7 +36,7 @@ void ofSounder::update(){
 void ofSounder::load(string soundfile){
     // TODO: Check the soundfile exists
     // TODO: Sometimes doesn't load: check error messages
-   	mysound.loadSound(soundfile);
+   	mysound.loadSound(audiodirectory<<'/'<<soundfile);
 	cout << "attempted to load: " << soundfile << "\n";
 }
 

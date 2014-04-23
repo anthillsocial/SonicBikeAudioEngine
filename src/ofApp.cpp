@@ -9,13 +9,14 @@ void ofApp::setup(){
     }else{
          ofLogError("Config: ")  << "Failed to parse JSON" << endl;
     }
-    int channels = result["audiochannels"].asString();
+    int channels = result["audiochannels"].asDouble();
+    audiodirectory = result["audiodirectory"].asString();
+    startupsound = result["startupsound"].asString(); 
 
     // Initialise some sound control objects
 	mySounder = new ofSounder*[channels];
 	for (int i = 0; i < nSounders; i++){                            
-	    string soundfile = "sounds/synth.wav";
-	    mySounder[i] = new ofSounder(soundfile);                              
+	    mySounder[i] = new ofSounder(startupsound, audiodirectory);                              
 	}
 
 	// OSC Vars: listen on the given port
