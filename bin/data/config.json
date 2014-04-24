@@ -3,4 +3,5 @@
     "audio_path": "sounds",
     "audio_startup":"startup.wav",
     "audio_channels": 4
+    "audio_log": "audio.log"
 }

@@ -37,11 +37,12 @@ void ofApp::setup(){
         ofLogNotice("Config: ")  << "Using default: " << CONFIG;
     }
     // Setup base variables
+    ofLogToFile(altresult["audio_log"].asString(), true);
+    ofLogNotice("-----------------------------");
+    ofLogNotice(ofGetTimestampString("%w %e %b %H:%M:%S%A" ))
     int channels = result["audio_channels"].asDouble();
     audiodirectory = result["audio_path"].asString();
     startupsound = audiodirectory+'/'+result["audio_startup"].asString(); 
-    cout << "CHANNELS: " << channels << "\n";
-    cout << "STARTUP SOUND: " << startupsound << "\n";
 
     // Initialise some sound control objects
 	mySounder = new ofSounder*[channels];
@@ -50,7 +51,7 @@ void ofApp::setup(){
 	}
 
 	// OSC Vars: listen on the given port
-	cout << "OSC LISTEN ON PORT: " << PORT << "\n";
+	ofLogNotice("OSC LISTEN ON PORT: ") << PORT;
 	receiver.setup(PORT);
 }
 
