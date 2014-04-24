@@ -12,7 +12,7 @@ class ofSounder {
         void load(string soundfile);
         void play();
         void stop();
-        void setspeed(float speed);
+        void setSpeed(float speed);
         void setPan(float pan);
         void setVolume(float vol);
         void setLoop(bool loop);
@@ -25,7 +25,6 @@ class ofSounder {
 		// variables
         string soundfile;
         ofSoundPlayer  mysound;
-        float synthPosition;
 
 	private:
  

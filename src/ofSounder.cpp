@@ -38,7 +38,7 @@ void ofSounder::stop(){
     mysound.stop();
 }
 
-void ofSounder::setspeed(float speed){
+void ofSounder::setSpeed(float speed){
     mysound.setSpeed(speed);
 }
 

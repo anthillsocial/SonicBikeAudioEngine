@@ -63,13 +63,50 @@ void ofApp::update(){
     	else if(m.getAddress() == "/set/pitch"){
 			int channel = m.getArgAsInt32(0);
 	        float speed = m.getArgAsFloat(1);
-	        mySounder[channel]->setspeed(speed);
-			cout << "osc: /set/speed [" << channel << "] " << "\n";
-    	    //float speed = 0.5f;
-		    //beats.setSpeed(speed);
-		    //synth.play();
-		    //synth.setSpeed( 0.1f + ((float)(ofGetHeight() - y) / (float)ofGetHeight())*10);
-		    //synth.setPan(ofMap(x, 0, widthStep, -1, 1, true));
+	        mySounder[channel]->setSpeed(speed);
+			cout << "osc: /set/pitch [" << channel << "] " << "\n";
+        }
+
+ 	    // Set the volume of a channel
+    	else if(m.getAddress() == "/set/volume"){
+			int channel = m.getArgAsInt32(0);
+	        float vol = m.getArgAsFloat(1);
+	        mySounder[channel]->setVolume(vol);
+			cout << "osc: /set/volume [" << channel << "] " << "\n";
+        }
+
+	    // Set the pan of a channel
+    	else if(m.getAddress() == "/set/pan"){
+			int channel = m.getArgAsInt32(0);
+	        float pan = m.getArgAsFloat(1);
+	        mySounder[channel]->setPan(pan);
+			cout << "osc: /set/pan [" << channel << "] " << "\n";
+        }
+	    
+	    // Set the loop of a channel
+	    // TODO: Deal with the bool properly   
+    	else if(m.getAddress() == "/set/loop"){
+			int channel = m.getArgAsInt32(0);
+	        float loop = m.getArgAsInt32(1);
+	        mySounder[channel]->setLoop(loop);
+			cout << "osc: /set/loop [" << channel << "] " << "\n";
+        }
+	    
+	    // Set the position of a channel
+    	else if(m.getAddress() == "/set/position"){
+			int channel = m.getArgAsInt32(0);
+	        float pos = m.getArgAsInt32(1);
+	        mySounder[channel]->setPosition(pos);
+			cout << "osc: /set/position [" << channel << "] " << "\n";
+        }
+	    
+	    // Set the multiplay of a channel
+	    // TODO: Deal with the bool properly
+    	else if(m.getAddress() == "/set/multiplay"){
+			int channel = m.getArgAsInt32(0);
+	        float mp = m.getArgAsInt32(1);
+	        mySounder[channel]->setMultiPlay(mp);
+			cout << "osc: /set/multiplay [" << channel << "] " << "\n";
         }
 
         // Check for a file being sent 
