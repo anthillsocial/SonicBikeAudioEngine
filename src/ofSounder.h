@@ -1,5 +1,22 @@
+/* BicrophonicsV1 embedded system for Kaffe Matthews 
+-- Copyright (C) 2014 Tom Keene
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef _OF_BALL		// by using this if statement you prevent the class to be called more than once - in other words what we're saying here is 
-#define _OF_BALL		//if the class has NOT been defined then define it
+#define _OF_BALL		// if the class has NOT been defined then define it
 					
 #include "ofMain.h"
 
@@ -12,13 +29,14 @@ class ofSounder {
         void load(string soundfile);
         void play();
         void stop();
+        void pause(bool paused);
         void setSpeed(float speed);
         void setPan(float pan);
         void setVolume(float vol);
         void setLoop(bool loop);
         void setPosition(float pos);
         void setMultiPlay(bool multi);
-
+      
 		// constructor
 		ofSounder(string soundfile);
 
