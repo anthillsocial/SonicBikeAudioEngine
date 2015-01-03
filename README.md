@@ -1,4 +1,4 @@
-ofAudoEngine
+Sonic Bike Audio Engine
 ============
 
 An audio playback mechanism written with openframeworks. Uses OSC, multichannel audio. Devised for the Sonic Bike project. www.sonicbikes.net
