@@ -25,7 +25,6 @@ class ofSounder {
 		// variables
         string soundfile;
         ofSoundPlayer  mysound;
-        float synthPosition;
 
 	private:
  
