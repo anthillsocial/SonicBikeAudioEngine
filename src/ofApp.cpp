@@ -11,16 +11,18 @@ void ofApp::setup(){
     }
     int channels = result["audiochannels"].asDouble();
     audiodirectory = result["audiodirectory"].asString();
-    startupsound = result["startupsound"].asString(); 
+    startupsound = audiodirectory+'/'+result["startupsound"].asString(); 
+    cout << "CHANNELS: " << channels << "\n";
+    cout << "STARTUP SOUND: " << startupsound << "\n";
 
     // Initialise some sound control objects
 	mySounder = new ofSounder*[channels];
-	for (int i = 0; i < nSounders; i++){                            
-	    mySounder[i] = new ofSounder(startupsound, audiodirectory);                              
+	for (int i = 0; i < channels; i++){                            
+	    mySounder[i] = new ofSounder(startupsound);                              
 	}
 
 	// OSC Vars: listen on the given port
-	cout << "listening for osc messages on port " << PORT << "\n";
+	cout << "OSC LISTEN ON PORT: " << PORT << "\n";
 	receiver.setup(PORT);
 }
 
@@ -43,22 +45,26 @@ void ofApp::update(){
 		receiver.getNextMessage(&m);
 
 		// Load a soundfile
-		if(m.getAddress() == "/load/channel"){
+		if(m.getAddress() == "/load"){
 			int channel = m.getArgAsInt32(0);
-			string soundfile = m.getArgAsString(1);
+			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
 	        mySounder[channel]->load(soundfile);
-			cout << "osc: /load/channel [" << channel << "] " << soundfile << "\n";
+			cout << "osc: /load [" << channel << "] " << soundfile << "\n";
 		}
 	    
 	    // Play soundfile
-		else if(m.getAddress() == "/play/channel"){
+		else if(m.getAddress() == "/play"){
 			int channel = m.getArgAsInt32(0);
 	        mySounder[channel]->play();
-			cout << "osc: /play/channel [" << channel << "] " << "\n";
+			cout << "osc: /play [" << channel << "] " << "\n";
 		}
     	
     	// Set the speed of a channel
     	else if(m.getAddress() == "/set/speed"){
+			int channel = m.getArgAsInt32(0);
+	        float speed = m.getArgAsFloat(1);
+	        mySounder[channel]->setspeed(speed);
+			cout << "osc: /set/speed [" << channel << "] " << "\n";
     	    //float speed = 0.5f;
 		    //beats.setSpeed(speed);
 		    //synth.play();

@@ -1,5 +1,5 @@
 {
-    "audiodirectory": "sounds"
-    "startupsound":"startup.wav"
-    "audiochannels": 4,
+    "audiodirectory": "sounds",
+    "startupsound":"startup.wav",
+    "audiochannels": 4
  }

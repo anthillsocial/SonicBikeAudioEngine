@@ -11,14 +11,18 @@ class ofSounder {
 		void update();
         void load(string soundfile);
         void play();
+        void stop();
+        void setspeed(float speed);
+        void setPan(float pan);
+        void setVolume(float vol);
+        void setLoop(bool loop);
+        void setPosition(float pos);
+        void setMultiPlay(bool multi);
 
 		// constructor
 		ofSounder(string soundfile);
 
 		// variables
-		string audiodirectory;
-		float speedX;
-		float speedY;
         string soundfile;
         ofSoundPlayer  mysound;
         float synthPosition;
