@@ -17,16 +17,17 @@ ofSounder::ofSounder(string _soundfile)
 void ofSounder::update(){
 
  /* 
-    setLoop()
-    getIsPlaying()
-    setPan()
-    setPaused()
-    setPlayer()
-    setPosition()
-    setPositionMS()
-    setSpeed()
-    setVolume()
-    stop()
+    mysound.setMultiPlay(false);
+    mysound.setLoop()
+    mysound.getIsPlaying()
+    mysound.setPan()
+    mysound.setPaused()
+    mysound.setPlayer()
+    mysound.setPosition()
+    mysound.setPositionMS()
+    mysound.setSpeed()
+    mysound.setVolume()
+    mysound.stop()
   */
    
 }

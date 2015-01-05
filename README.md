@@ -3,6 +3,11 @@ Sonic Bike Audio Engine
 
 An audio playback mechanism written with openframeworks. Uses OSC, multichannel audio. Devised for the Sonic Bike project. www.sonicbikes.net
 
+Currently Tested and working with:
+OpenFrameworks v0.8.4 linux64 release
+Beaglebone black
+Arch Linux
+
 License
 =====================
 
