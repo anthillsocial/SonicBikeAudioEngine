@@ -64,7 +64,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        float speed = m.getArgAsFloat(1);
 	        mySounder[channel]->setSpeed(speed);
-			cout << "osc: /pitch [" << channel << "] pitch: " << pitch << "\n";
+			cout << "osc: /pitch [" << channel << "] pitch: " << speed << "\n";
         }
 
  	    // Set the volume of a channel
