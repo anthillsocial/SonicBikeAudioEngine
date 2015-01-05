@@ -60,53 +60,53 @@ void ofApp::update(){
 		}
     	
     	// Set the pitch of a channel
-    	else if(m.getAddress() == "/set/pitch"){
+    	else if(m.getAddress() == "/pitch"){
 			int channel = m.getArgAsInt32(0);
 	        float speed = m.getArgAsFloat(1);
 	        mySounder[channel]->setSpeed(speed);
-			cout << "osc: /set/pitch [" << channel << "] " << "\n";
+			cout << "osc: /pitch [" << channel << "] pitch: " << pitch << "\n";
         }
 
  	    // Set the volume of a channel
-    	else if(m.getAddress() == "/set/volume"){
+    	else if(m.getAddress() == "/volume"){
 			int channel = m.getArgAsInt32(0);
 	        float vol = m.getArgAsFloat(1);
 	        mySounder[channel]->setVolume(vol);
-			cout << "osc: /set/volume [" << channel << "] " << "\n";
+			cout << "osc: /volume [" << channel << "] vol: " << vol << "\n";
         }
 
 	    // Set the pan of a channel
-    	else if(m.getAddress() == "/set/pan"){
+    	else if(m.getAddress() == "/pan"){
 			int channel = m.getArgAsInt32(0);
 	        float pan = m.getArgAsFloat(1);
 	        mySounder[channel]->setPan(pan);
-			cout << "osc: /set/pan [" << channel << "] " << "\n";
+			cout << "osc: /pan [" << channel << "] pan: " << pan << "\n";
         }
 	    
 	    // Set the loop of a channel
 	    // TODO: Deal with the bool properly   
-    	else if(m.getAddress() == "/set/loop"){
+    	else if(m.getAddress() == "/loop"){
 			int channel = m.getArgAsInt32(0);
 	        float loop = m.getArgAsInt32(1);
 	        mySounder[channel]->setLoop(loop);
-			cout << "osc: /set/loop [" << channel << "] " << "\n";
+			cout << "osc: /loop [" << channel << "] loop: " << loop << "\n";
         }
 	    
 	    // Set the position of a channel
-    	else if(m.getAddress() == "/set/position"){
+    	else if(m.getAddress() == "/position"){
 			int channel = m.getArgAsInt32(0);
 	        float pos = m.getArgAsInt32(1);
 	        mySounder[channel]->setPosition(pos);
-			cout << "osc: /set/position [" << channel << "] " << "\n";
+			cout << "osc: /position [" << channel << "] pos: " <<  pos << "\n";
         }
 	    
 	    // Set the multiplay of a channel
 	    // TODO: Deal with the bool properly
-    	else if(m.getAddress() == "/set/multiplay"){
+    	else if(m.getAddress() == "/multiplay"){
 			int channel = m.getArgAsInt32(0);
 	        float mp = m.getArgAsInt32(1);
 	        mySounder[channel]->setMultiPlay(mp);
-			cout << "osc: /set/multiplay [" << channel << "] " << "\n";
+			cout << "osc: /multiplay [" << channel << "] mp: " << mp << "\n";
         }
 
         // Check for a file being sent 
