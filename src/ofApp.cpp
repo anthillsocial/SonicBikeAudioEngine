@@ -59,8 +59,8 @@ void ofApp::update(){
 			cout << "osc: /play [" << channel << "] " << "\n";
 		}
     	
-    	// Set the speed of a channel
-    	else if(m.getAddress() == "/set/speed"){
+    	// Set the pitch of a channel
+    	else if(m.getAddress() == "/set/pitch"){
 			int channel = m.getArgAsInt32(0);
 	        float speed = m.getArgAsFloat(1);
 	        mySounder[channel]->setspeed(speed);
