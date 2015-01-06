@@ -1,3 +1,20 @@
+/* BicrophonicsV1 embedded system for Kaffe Matthews 
+-- Copyright (C) 2014 Tom Keene
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "ofApp.h"
 
 //--------------------------------------------------------------
@@ -59,6 +76,22 @@ void ofApp::update(){
 			cout << "osc: /play [" << channel << "] " << "\n";
 		}
     	
+    	// Stop soundfile
+		else if(m.getAddress() == "/stop"){
+			int channel = m.getArgAsInt32(0);
+	        mySounder[channel]->stop();
+			cout << "osc: /stop [" << channel << "] " << "\n";
+		}
+
+        // Pause soundfile
+		else if(m.getAddress() == "/pause"){
+			int channel = m.getArgAsInt32(0);	
+			int paused = m.getArgAsInt32(1);
+	        mySounder[channel]->pause(paused);
+			cout << "osc: /play [" << channel << "] " << "\n";
+		}
+
+
     	// Set the pitch of a channel
     	else if(m.getAddress() == "/pitch"){
 			int channel = m.getArgAsInt32(0);
@@ -87,7 +120,7 @@ void ofApp::update(){
 	    // TODO: Deal with the bool properly   
     	else if(m.getAddress() == "/loop"){
 			int channel = m.getArgAsInt32(0);
-	        float loop = m.getArgAsInt32(1);
+	        int loop = m.getArgAsInt32(1);
 	        mySounder[channel]->setLoop(loop);
 			cout << "osc: /loop [" << channel << "] loop: " << loop << "\n";
         }
@@ -95,7 +128,7 @@ void ofApp::update(){
 	    // Set the position of a channel
     	else if(m.getAddress() == "/position"){
 			int channel = m.getArgAsInt32(0);
-	        float pos = m.getArgAsInt32(1);
+	        float pos = m.getArgAsFloat(1);
 	        mySounder[channel]->setPosition(pos);
 			cout << "osc: /position [" << channel << "] pos: " <<  pos << "\n";
         }
@@ -104,7 +137,7 @@ void ofApp::update(){
 	    // TODO: Deal with the bool properly
     	else if(m.getAddress() == "/multiplay"){
 			int channel = m.getArgAsInt32(0);
-	        float mp = m.getArgAsInt32(1);
+	        int mp = m.getArgAsInt32(1);
 	        mySounder[channel]->setMultiPlay(mp);
 			cout << "osc: /multiplay [" << channel << "] mp: " << mp << "\n";
         }
