@@ -22,7 +22,7 @@ void ofApp::setup(){
     // Load and parse the config file
     bool parsingSuccessful = result.open(CONFIG);
     if (parsingSuccessful){
-        ofLogNotice("Loaded config:") << result.getRawString();
+        ofLogNotice("Loaded config") << result.getRawString();
     }else{
          ofLogError("Config: ")  << "Failed to parse JSON";
     }
@@ -30,16 +30,19 @@ void ofApp::setup(){
     string altconfig = result["altconfig"].asString();
     bool altParsingSuccessful = altresult.open(altconfig);
     if (altParsingSuccessful){
-        ofLogNotice("Loaded altconfig:") << altresult.getRawString();
+        ofLogNotice("Loaded altconfig") << altresult.getRawString();
         result = altresult;
     }else{
         ofLogNotice("Config: ")  << "No altconfig: " << result["altconfig"];
         ofLogNotice("Config: ")  << "Using default: " << CONFIG;
     }
     // Setup base variables
-    ofLogToFile(altresult["audio_log"].asString(), true);
-    ofLogNotice("-----------------------------");
-    ofLogNotice(ofGetTimestampString("%w %e %b %H:%M:%S%A" ))
+    if(result["debug"].asString() ==  "true"){
+        ofLogToFile(result["audio_log"].asString(), true);
+    }else{
+        ofSetLogLevel(OF_LOG_ERROR);
+    }
+    ofLogNotice("STARTUP: "+ofGetTimestampString("%w %e %b %H:%M:%S%A" ));
     int channels = result["audio_channels"].asDouble();
     audiodirectory = result["audio_path"].asString();
     startupsound = audiodirectory+'/'+result["audio_startup"].asString(); 
@@ -78,21 +81,21 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
 	        mySounder[channel]->load(soundfile);
-			cout << "osc: /load [" << channel << "] " << soundfile << "\n";
+			ofLogNotice("osc:") << "/load [" << channel << "] " << soundfile;
 		}
 	    
 	    // Play soundfile
 		else if(m.getAddress() == "/play"){
 			int channel = m.getArgAsInt32(0);
 	        mySounder[channel]->play();
-			cout << "osc: /play [" << channel << "] " << "\n";
+			ofLogNotice("osc:") << "/play [" << channel << "] ";
 		}
     	
     	// Stop soundfile
 		else if(m.getAddress() == "/stop"){
 			int channel = m.getArgAsInt32(0);
 	        mySounder[channel]->stop();
-			cout << "osc: /stop [" << channel << "] " << "\n";
+			ofLogNotice("osc:") << "/stop [" << channel << "] ";
 		}
 
         // Pause soundfile
@@ -100,7 +103,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);	
 			int paused = m.getArgAsInt32(1);
 	        mySounder[channel]->pause(paused);
-			cout << "osc: /play [" << channel << "] " << "\n";
+			ofLogNotice("osc:") << "/play [" << channel << "] ";
 		}
 
 
@@ -109,7 +112,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        float speed = m.getArgAsFloat(1);
 	        mySounder[channel]->setSpeed(speed);
-			cout << "osc: /pitch [" << channel << "] pitch: " << speed << "\n";
+			ofLogNotice("osc:") << "/pitch [" << channel << "] pitch: " << speed;
         }
 
  	    // Set the volume of a channel
@@ -117,7 +120,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        float vol = m.getArgAsFloat(1);
 	        mySounder[channel]->setVolume(vol);
-			cout << "osc: /volume [" << channel << "] vol: " << vol << "\n";
+			ofLogNotice("osc:") << "/volume [" << channel << "] vol: " << vol;
         }
 
 	    // Set the pan of a channel
@@ -125,7 +128,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        float pan = m.getArgAsFloat(1);
 	        mySounder[channel]->setPan(pan);
-			cout << "osc: /pan [" << channel << "] pan: " << pan << "\n";
+			ofLogNotice("osc:") << "/pan [" << channel << "] pan: " << pan;
         }
 	    
 	    // Set the loop of a channel
@@ -134,7 +137,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        int loop = m.getArgAsInt32(1);
 	        mySounder[channel]->setLoop(loop);
-			cout << "osc: /loop [" << channel << "] loop: " << loop << "\n";
+			ofLogNotice("osc:") << "/loop [" << channel << "] loop: " << loop;
         }
 	    
 	    // Set the position of a channel
@@ -142,7 +145,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        float pos = m.getArgAsFloat(1);
 	        mySounder[channel]->setPosition(pos);
-			cout << "osc: /position [" << channel << "] pos: " <<  pos << "\n";
+			ofLogNotice("osc:") << "/position [" << channel << "] pos: " <<  pos;
         }
 	    
 	    // Set the multiplay of a channel
@@ -151,7 +154,7 @@ void ofApp::update(){
 			int channel = m.getArgAsInt32(0);
 	        int mp = m.getArgAsInt32(1);
 	        mySounder[channel]->setMultiPlay(mp);
-			cout << "osc: /multiplay [" << channel << "] mp: " << mp << "\n";
+			ofLogNotice("osc:") << "/multiplay [" << channel << "] mp: " << mp << "\n";
         }
 
         // Check for a file being sent 
@@ -186,7 +189,7 @@ void ofApp::update(){
 				}
 			}
 			// print the message to stdout
-			cout << "osc: " << msg_string << "\n";
+			ofLogNotice("osc:") << msg_string;
 		}
 
 	}
