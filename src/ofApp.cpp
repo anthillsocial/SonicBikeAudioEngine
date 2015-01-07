@@ -24,11 +24,22 @@ void ofApp::setup(){
     if (parsingSuccessful){
         ofLogNotice("Loaded config:") << result.getRawString();
     }else{
-         ofLogError("Config: ")  << "Failed to parse JSON" << endl;
+         ofLogError("Config: ")  << "Failed to parse JSON";
     }
-    int channels = result["audiochannels"].asDouble();
-    audiodirectory = result["audiodirectory"].asString();
-    startupsound = audiodirectory+'/'+result["startupsound"].asString(); 
+    // Check if the altconfig file exists, and load it if it does
+    string altconfig = result["altconfig"].asString();
+    bool altParsingSuccessful = altresult.open(altconfig);
+    if (altParsingSuccessful){
+        ofLogNotice("Loaded altconfig:") << altresult.getRawString();
+        result = altresult;
+    }else{
+        ofLogNotice("Config: ")  << "No altconfig: " << result["altconfig"];
+        ofLogNotice("Config: ")  << "Using default: " << CONFIG;
+    }
+    // Setup base variables
+    int channels = result["audio_channels"].asDouble();
+    audiodirectory = result["audio_path"].asString();
+    startupsound = audiodirectory+'/'+result["audio_startup"].asString(); 
     cout << "CHANNELS: " << channels << "\n";
     cout << "STARTUP SOUND: " << startupsound << "\n";
 

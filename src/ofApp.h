@@ -44,6 +44,7 @@ class ofApp : public ofBaseApp{
     private:
         //------------------------Json congif loader
         ofxJSONElement result;
+        ofxJSONElement altresult; 
         //------------------------Sound control objects
         ofSounder** mySounder;  
         int nSounders;

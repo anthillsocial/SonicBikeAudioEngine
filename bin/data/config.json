@@ -1,5 +1,6 @@
 {
-    "audiodirectory": "sounds",
-    "startupsound":"startup.wav",
-    "audiochannels": 4
- }
+    "altconfig": "/home/sonic/bicrophonic1/config.json",
+    "audio_path": "sounds",
+    "audio_startup":"startup.wav",
+    "audio_channels": 4
+}
