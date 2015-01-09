@@ -222,3 +222,57 @@
 *** press Esc or Ctrl-C to quit
 ***
 
+
+
+--------------------------------------- 2015-01-09-16-10-43-934
+[notice ] STARTUP: Fri 9 Jan 16:10:43PM: 
+[ error ] ofOpenALSoundPlayer: loadSound(): couldn't generate source for "/home/tom/Dropbox/Projects/sonicbike/of_v0.8.4_linux64_release/apps/myApps/SonicBikeAudioEngine/bin/data/sounds/startup.wav": 40964 AL_INVALID_OPERATION
+[notice ] OSC LISTEN ON PORT: : 12345
+[notice ] ofAppNoWindow: ***
+***
+*** running a headless (no window) app
+***
+*** keyboard input works here
+***
+*** press Esc or Ctrl-C to quit
+***
+
+
+
+--------------------------------------- 2015-01-09-16-11-03-306
+[notice ] STARTUP: Fri 9 Jan 16:11:03PM: 
+[ error ] ofOpenALSoundPlayer: loadSound(): couldn't generate source for "/home/tom/Dropbox/Projects/sonicbike/of_v0.8.4_linux64_release/apps/myApps/SonicBikeAudioEngine/bin/data/sounds/startup.wav": 40964 AL_INVALID_OPERATION
+[notice ] OSC LISTEN ON PORT: : 12345
+[notice ] ofAppNoWindow: ***
+***
+*** running a headless (no window) app
+***
+*** keyboard input works here
+***
+*** press Esc or Ctrl-C to quit
+***
+
+
+
+--------------------------------------- 2015-01-09-16-13-56-748
+[notice ] STARTUP: Fri 9 Jan 16:13:56PM: 
+[notice ] OSC LISTEN ON PORT: : 12345
+[notice ] ofAppNoWindow: ***
+***
+*** running a headless (no window) app
+***
+*** keyboard input works here
+***
+*** press Esc or Ctrl-C to quit
+***
+
+[ error ] ofOpenALSoundPlayer: loadSound(): couldn't create stereo buffers for "/home/tom/Dropbox/Projects/sonicbike/of_v0.8.4_linux64_release/apps/myApps/SonicBikeAudioEngine/bin/data/sounds/GeeseFly.wav": 40964 AL_INVALID_OPERATION
+[notice ] osc:: /load [0] sounds/GeeseFly.wav
+[notice ] osc:: /play [0] 
+[notice ] osc:: /load [0] sounds/GeeseFly.wav
+[notice ] osc:: /play [0] 
+[ error ] ofOpenALSoundPlayer: loadSound(): couldn't create stereo buffers for "/home/tom/Dropbox/Projects/sonicbike/of_v0.8.4_linux64_release/apps/myApps/SonicBikeAudioEngine/bin/data/sounds/SerenadeStrHi.wav": 40964 AL_INVALID_OPERATION
+[notice ] osc:: /load [0] sounds/SerenadeStrHi.wav
+[notice ] osc:: /play [0] 
+[notice ] osc:: /play [0] 
+[notice ] osc:: /play [1] 

@@ -16,16 +16,17 @@
 */
 #include "ofSounder.h"
 // try: http://forum.openframeworks.cc/t/tonic-a-refreshingly-crisp-c-audio-patching-library/12923/12
-ofSounder::ofSounder(string _soundfile)
+ofSounder::ofSounder()
 {   
     // Setup some base variables
-	soundfile = _soundfile;
+	//soundfile = _soundfile;
 
     // And get the initial sound going
-	mysound.loadSound(soundfile);
-	mysound.setVolume(0.75f);
+	//mysound.loadSound(soundfile);
+	mysound.setVolume(1.0f);
     mysound.setMultiPlay(false);
-    mysound.play();
+    //mysound.play();
+    soundfile = "none";
 }
 
 
@@ -37,13 +38,23 @@ void ofSounder::update(){
   */
 }
 
-void ofSounder::load(string soundfile){
+void ofSounder::load(string newsoundfile){
     // TODO: Seems to bug where unload sounds doesn't work & load needs to be called twice.
     //       Soooo... this hacky fix will do for now but should be properly sorted.
-   	mysound.loadSound(soundfile);
-	mysound.loadSound(soundfile);
-	cout << "attempted to load: " << soundfile << "\n";
+    //	     Need to check: ../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.cpp
+    soundfile = newsoundfile;  
+	if( ! mysound.loadSound(soundfile) ){
+        mysound.loadSound(soundfile); 
+	}
+	cout << "Attempted to load: " << soundfile << "\n";
 }
+
+void ofSounder::unload(){
+	mysound.unloadSound();
+	cout << "Unloaded: " << soundfile << "\n";
+}
+
+
 
 void ofSounder::play(){
     mysound.play();

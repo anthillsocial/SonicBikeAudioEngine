@@ -22,20 +22,19 @@ void ofApp::setup(){
     // Load and parse the config file
     bool parsingSuccessful = result.open(CONFIG);
     if (parsingSuccessful){
-        ofLogNotice("Loaded config") << result.getRawString();
+        ofLogNotice("Config") << "Loaded default" ;// result.getRawString();
     }else{
-         ofLogError("Config: ")  << "Failed to parse JSON";
+        ofLogError("Config: ")  << "Failed to parse file";
     }
     // Check if the altconfig file exists, and load it if it does
     string altconfig = result["altconfig"].asString();
     bool altParsingSuccessful = altresult.open(altconfig);
     if (altParsingSuccessful){
-        ofLogNotice("Loaded altconfig") << altresult.getRawString();
+        ofLogNotice("Config: ") << "Loaded altconfig" ;//altresult.getRawString();
         result = altresult;
     }else{
-        ofLogNotice("Config: ")  << "No altconfig: " << result["altconfig"];
-        ofLogNotice("Config: ")  << "Using default: " << CONFIG;
-    }
+        ofLogNotice("Config: ") << "No available altconfig file" ; //altresult.getRawString();
+    }    
     // Setup base variables
     if(result["debug"].asString() ==  "true"){
         ofLogToFile(result["audio_log"].asString(), true);
@@ -50,7 +49,7 @@ void ofApp::setup(){
     // Initialise some sound control objects
 	mySounder = new ofSounder*[channels];
 	for (int i = 0; i < channels; i++){                            
-	    mySounder[i] = new ofSounder(startupsound);                              
+	    mySounder[i] = new ofSounder();
 	}
 
 	// OSC Vars: listen on the given port
@@ -82,6 +81,13 @@ void ofApp::update(){
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
 	        mySounder[channel]->load(soundfile);
 			ofLogNotice("osc:") << "/load [" << channel << "] " << soundfile;
+		}
+	    
+	    // Unload a soundfile
+		if(m.getAddress() == "/unload"){
+			int channel = m.getArgAsInt32(0);
+		    mySounder[channel]->unload();
+			ofLogNotice("osc") << "/unload [" << channel << "]";
 		}
 	    
 	    // Play soundfile

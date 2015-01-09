@@ -26,7 +26,8 @@ class ofSounder {
 
 		// methods
 		void update();
-        void load(string soundfile);
+        void load(string newsoundfile);
+        void unload();
         void play();
         void stop();
         void pause(bool paused);
@@ -38,11 +39,12 @@ class ofSounder {
         void setMultiPlay(bool multi);
       
 		// constructor
-		ofSounder(string soundfile);
+		ofSounder();
 
 		// variables
         string soundfile;
         ofSoundPlayer  mysound;
+        bool loaded;
 
 	private:
  
