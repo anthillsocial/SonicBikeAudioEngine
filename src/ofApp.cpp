@@ -34,8 +34,10 @@ void ofApp::setup(){
         result = altresult;
     }else{
         ofLogNotice("Config: ") << "No available altconfig file" ; //altresult.getRawString();
-    }    
+    }
+
     // Setup base variables
+    
     if(result["debug"].asString() ==  "true"){
         ofLogToFile(result["audio_log"].asString(), true);
     }else{
@@ -59,7 +61,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+    // Grab the current log level
+    ofLogLevel logLevel = ofGetLogLevel();  
+
     // Update all the sound objects
     for (int i = 0; i < nSounders; i++){
         mySounder[i]->update();
@@ -79,7 +83,10 @@ void ofApp::update(){
 		if(m.getAddress() == "/load"){
 			int channel = m.getArgAsInt32(0);
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
+			// Silence error TODO: Fix hack where audio class needs to load twice
+			ofSetLogLevel(OF_LOG_SILENT);
 	        mySounder[channel]->load(soundfile);
+	        ofSetLogLevel(logLevel);
 			ofLogNotice("osc:") << "/load [" << channel << "] " << soundfile;
 		}
 	    
