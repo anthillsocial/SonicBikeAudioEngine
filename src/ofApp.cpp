@@ -28,12 +28,14 @@ void ofApp::setup(){
     }
     // Check if the altconfig file exists, and load it if it does
     string altconfig = result["altconfig"].asString();
+    ofSetLogLevel(OF_LOG_SILENT);
     bool altParsingSuccessful = altresult.open(altconfig);
+    ofSetLogLevel(OF_LOG_NOTICE);
     if (altParsingSuccessful){
         ofLogNotice("Config: ") << "Loaded altconfig" ;//altresult.getRawString();
         result = altresult;
     }else{
-        ofLogNotice("Config: ") << "No available altconfig file" ; //altresult.getRawString();
+        ofLogNotice("Config: ") << "No altconfig to load" ; //altresult.getRawString();
     }
 
     // Setup base variables
