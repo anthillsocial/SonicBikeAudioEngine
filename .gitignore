@@ -1,4 +1,5 @@
 bin/SonicBikeAudioEngine
+*.log
 # Compiled Object files
 *.slo
 *.lo
