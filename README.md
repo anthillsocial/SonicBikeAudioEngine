@@ -19,7 +19,7 @@ Be sure to download and add to OF addon directory. Just <br />
 License
 =====================
 
-Swamp Bike Opera embedded system for Kaffe Matthews 
+Embedded system for Kaffe Matthews 
 Copyright (C) 2014 Tom Keene
 
 This program is free software: you can redistribute it and/or modify
