@@ -99,10 +99,10 @@ void ofApp::update(){
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
 			// Check if the file exists
 			ofFile file (soundfile);   
-			if(file.exists()){
+			if(file.exists()){ 
 				// Check we have enough memory to load it
 				int filesize = file.getSize(); ofLogNotice("filesize") << filesize;
-				int free = ofToInt(ofSystem("free | grep Mem | awk '{print $4}'")); ofLogNotice("free") << free;
+				int free = ofToInt(ofTkSystem("free | grep Mem | awk '{print $4}'")); ofLogNotice("free") << free;
 				float filesizemb = float(filesize)/1000.0/1000.0; ofLogNotice("filesizemb") << filesizemb;
 				float freemb = float(free)/1000.0; ofLogNotice("freemb") << freemb;
 				float availmb = freemb-filesizemb; ofLogNotice("availmb") << availmb;
@@ -250,3 +250,31 @@ void ofApp::update(){
 
 }
 
+string ofApp::ofTkSystem(const string& command){
+	FILE * ret = NULL;
+#ifdef TARGET_WIN32
+	ret = _popen(command.c_str(),"r");
+#else 
+	ret = popen(command.c_str(),"r");
+#endif	
+	string strret;
+	int c;
+
+	if (ret == NULL){
+		ofLogError("ofUtils") << "ofSystem(): error opening return file for command \"" << command  << "\"";
+	}else{
+		c = fgetc (ret);
+		while (c != EOF) {
+			ofLogNotice("ofUtils") << "'" << c << "'";
+			strret += c;
+			c = fgetc (ret);
+		}
+#ifdef TARGET_WIN32
+		_pclose (ret);
+#else
+		pclose (ret);
+#endif
+	}
+
+	return strret;
+}

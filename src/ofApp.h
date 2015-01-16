@@ -34,7 +34,8 @@ class ofApp : public ofBaseApp{
 	    // Base methods
 		void setup();
 		void update();
-        
+ 		string ofTkSystem(const string& command);
+
         //------------------------OSC control
         string audiodirectory;
         string startupsound; 
