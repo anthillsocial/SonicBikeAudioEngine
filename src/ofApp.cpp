@@ -110,7 +110,7 @@ void ofApp::update(){
 					ofLogNotice("osc error") << "Not enough memory (" << freemb << "mb) to load file (" << filesizemb << "mb) | /load [" << channel << "]" << soundfile;
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
-					ofLogNotice("start to load")
+					ofLogNotice("start to load");
 					//ofSetLogLevel(OF_LOG_SILENT);
 	        		mySounder[channel]->load(soundfile);
 	        		//ofSetLogLevel(logLevel);
