@@ -101,18 +101,19 @@ void ofApp::update(){
 			ofFile file (soundfile);   
 			if(file.exists()){
 				// Check we have enough memory to load it
-				int filesize = file.getSize();
-				int free = ofToInt(ofSystem("free | grep Mem | awk '{print $4}'"));
-				float filesizemb = float(filesize)/1000.0/1000.0; 
-				float freemb = float(free)/1000.0;  
-				float availmb = freemb-filesizemb;
+				int filesize = file.getSize(); ofLogNotice("filesize") << filesize;
+				int free = ofToInt(ofSystem("free | grep Mem | awk '{print $4}'")); ofLogNotice("free") << free;
+				float filesizemb = float(filesize)/1000.0/1000.0; ofLogNotice("filesizemb") << filesizemb;
+				float freemb = float(free)/1000.0; ofLogNotice("freemb") << freemb;
+				float availmb = freemb-filesizemb; ofLogNotice("availmb") << availmb;
 				if(filesizemb > availmb){
 					ofLogNotice("osc error") << "Not enough memory (" << freemb << "mb) to load file (" << filesizemb << "mb) | /load [" << channel << "]" << soundfile;
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
-					ofSetLogLevel(OF_LOG_SILENT);
+					ofLogNotice("start to load")
+					//ofSetLogLevel(OF_LOG_SILENT);
 	        		mySounder[channel]->load(soundfile);
-	        		ofSetLogLevel(logLevel);
+	        		//ofSetLogLevel(logLevel);
 					ofLogNotice("osc") << "/load [" << channel << "] " << soundfile << " | freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
 				}
 			}else{
