@@ -85,7 +85,7 @@ void ofApp::update(){
 		if(args>=1){
 			if( m.getArgType(0) == OFXOSC_TYPE_INT32){
 				channel = m.getArgAsInt32(0);
-				if(channel>nChannels){
+				if(channel>(nChannels-1)){
 					ofLogNotice("osc error") << "channel [" <<channel<<"] out of range. max " << nChannels;
 					channel = -1;
 				}
@@ -95,7 +95,7 @@ void ofApp::update(){
 		}
 
 		// Load a soundfile
-		if(m.getAddress() == "/load" && channel>=0){
+		if(m.getAddress() == "/load" && channel >=0){
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
 			// Check if the file exists
 			ofFile file (soundfile);   
@@ -103,16 +103,17 @@ void ofApp::update(){
 				// Check we have enough memory to load it
 				int filesize = file.getSize();
 				int free = ofToInt(ofSystem("free | grep Mem | awk '{print $4}'"));
-				int avail = free-filesize;
-				ofLogNotice("memory") << "free: " << free << " filesize: " << filesize << " available: " << avail;
-				if((filesize*1.5)>=free){
-					ofLogNotice("osc error") << "Not enough memory (" << free << "mb) to load file (" << filesize << "mb) | /load [" << channel << "]" << soundfile;
+				float filesizemb = float(filesize)/1000.0/1000.0; 
+				float freemb = float(free)/1000.0;  
+				float availmb = freemb-filesizemb;
+				if(filesizemb > availmb){
+					ofLogNotice("osc error") << "Not enough memory (" << freemb << "mb) to load file (" << filesizemb << "mb) | /load [" << channel << "]" << soundfile;
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
 					ofSetLogLevel(OF_LOG_SILENT);
 	        		mySounder[channel]->load(soundfile);
 	        		ofSetLogLevel(logLevel);
-					ofLogNotice("osc") << "/load [" << channel << "] " << soundfile;
+					ofLogNotice("osc") << "/load [" << channel << "] " << soundfile << " | freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
 				}
 			}else{
 				ofLogNotice("osc error") << "File doesn't exist \"/load [" << channel << "] " << soundfile; 
@@ -218,7 +219,7 @@ void ofApp::update(){
         //    //receivedImage.loadImage(buffer); TODO: Enable audio transmission
         //}
         // The message is unrecognised
-		else{
+		else if (channel >=0){
 			string msg_string;
 			msg_string = m.getAddress();
 			msg_string += ": ";
