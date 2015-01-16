@@ -111,9 +111,9 @@ void ofApp::update(){
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
 					ofLogNotice("start to load");
-					//ofSetLogLevel(OF_LOG_SILENT);
+					ofSetLogLevel(OF_LOG_SILENT);
 	        		mySounder[channel]->load(soundfile);
-	        		//ofSetLogLevel(logLevel);
+	        		ofSetLogLevel(logLevel);
 					ofLogNotice("osc") << "/load [" << channel << "] " << soundfile << " | freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
 				}
 			}else{
@@ -250,6 +250,7 @@ void ofApp::update(){
 
 }
 
+// an exact replica of ofSystem to experiemnt with. wasnt working on ARM
 string ofApp::ofTkSystem(const string& command){
 	FILE * ret = NULL;
 #ifdef TARGET_WIN32
@@ -265,7 +266,7 @@ string ofApp::ofTkSystem(const string& command){
 	}else{
 		c = fgetc (ret);
 		while (c != EOF) {
-			ofLogNotice("ofUtils") << "'" << c << "'";
+			//ofLogNotice("ofUtils") << "'" << c << "'";
 			strret += c;
 			c = fgetc (ret);
 		}
