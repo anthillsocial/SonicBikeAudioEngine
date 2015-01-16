@@ -100,14 +100,24 @@ void ofApp::update(){
 			// Check if the file exists
 			ofFile file (soundfile);   
 			if(file.exists()){
-				// Silence error TODO: Fix hack where audio class needs to load twice
-				ofSetLogLevel(OF_LOG_SILENT);
-	        	mySounder[channel]->load(soundfile);
-	        	ofSetLogLevel(logLevel);
-				ofLogNotice("osc") << "/load [" << channel << "] " << soundfile;
+				// Check we have enough memory to load it
+				int filesize = file.getSize();
+				int free = ofToInt(ofSystem("free | grep Mem | awk '{print $4}'"));
+				int avail = free-filesize;
+				ofLogNotice("memory") << "free: " << free << " filesize: " << filesize << " available: " << avail;
+				if((filesize*1.5)>=free){
+					ofLogNotice("osc error") << "Not enough memory (" << free << "mb) to load file (" << filesize << "mb) | /load [" << channel << "]" << soundfile;
+				}else{
+					// Silence error TODO: Fix hack where audio class needs to load twice
+					ofSetLogLevel(OF_LOG_SILENT);
+	        		mySounder[channel]->load(soundfile);
+	        		ofSetLogLevel(logLevel);
+					ofLogNotice("osc") << "/load [" << channel << "] " << soundfile;
+				}
 			}else{
 				ofLogNotice("osc error") << "File doesn't exist \"/load [" << channel << "] " << soundfile; 
 			}
+			file.close();  
 		}	    
 	    // Unload a soundfile
 		else if(m.getAddress() == "/unload" && channel>=0){
