@@ -34,6 +34,7 @@ class ofApp : public ofBaseApp{
 	    // Base methods
 		void setup();
 		void update();
+		void exit();
  		string ofTkSystem(const string& command);
 
         //------------------------OSC control

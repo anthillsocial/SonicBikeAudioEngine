@@ -2,7 +2,7 @@
     "altconfig": "/home/sonic/bicrophonic1/config.json",
     "audio_path": "sounds",
     "audio_startup":"startup.wav",
-    "audio_channels": 4,
+    "audio_channels": 200,
     "audio_log": "audio.log",
     "debug":"true"
 }

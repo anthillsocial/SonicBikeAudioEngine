@@ -7,7 +7,7 @@ DELAY=1
 # Smaller files
 declare -a arr=("startup.wav" "9DomskAnimal.wav" "GeeseFly.wav" "LeveNEFUPdemo.wav")
 # 18mb file
-declare -a arr=("startup.wav" "FlyingHomeMstN.wav" "FlyingHomeMstN.wav" "FlyingHomeMstN.wav")
+#declare -a arr=("startup.wav" "FlyingHomeMstN.wav" "FlyingHomeMstN.wav" "FlyingHomeMstN.wav")
 
 # Loop and sens osc messages
 n=0

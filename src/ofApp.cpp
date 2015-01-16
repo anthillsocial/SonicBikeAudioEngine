@@ -97,6 +97,8 @@ void ofApp::update(){
 		// Load a soundfile
 		if(m.getAddress() == "/load" && channel >=0){
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
+			delete mySounder[channel];
+			mySounder[channel] = new ofSounder();
 			// Check if the file exists
 			ofFile file (soundfile);   
 			if(file.exists()){ 
@@ -106,7 +108,7 @@ void ofApp::update(){
 				float filesizemb = float(filesize)/1000.0/1000.0; //ofLogNotice("filesizemb") << filesizemb;
 				float freemb = float(free)/1000.0; //ofLogNotice("freemb") << freemb;
 				float availmb = freemb-filesizemb; //ofLogNotice("availmb") << availmb;
-				if(filesizemb > availmb){
+				if( (filesizemb*3) > availmb){
 					ofLogNotice("osc error") << "Not enough memory (" << freemb << "mb) to load file (" << filesizemb << "mb) | /load [" << channel << "]" << soundfile;
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
@@ -124,7 +126,13 @@ void ofApp::update(){
 	    // Unload a soundfile
 		else if(m.getAddress() == "/unload" && channel>=0){
 		    mySounder[channel]->unload();
+		    delete mySounder[channel];
+		    mySounder[channel] = new ofSounder();
 			ofLogNotice("osc") << "/unload [" << channel << "]";
+		}
+		// Clear all the memory
+		else if(m.getAddress() == "/clear"){  
+			exit();
 		}
 	    // Play soundfile
 		else if(m.getAddress() == "/play" && channel>=0){
@@ -248,6 +256,15 @@ void ofApp::update(){
 
 	}
 
+}
+
+// cleanup on exit
+void ofApp::exit(){
+	// Update all the sound objects
+ 	for (int i = 0; i < nChannels; i++){
+ 		delete mySounder[i];
+ 	}
+ 	ofLogNotice("oss") << "Exited SonicBikeAudioEngine";
 }
 
 // an exact replica of ofSystem to experiemnt with. wasnt working on ARM
