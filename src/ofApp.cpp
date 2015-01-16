@@ -24,7 +24,7 @@ void ofApp::setup(){
     if (parsingSuccessful){
         ofLogNotice("Config") << "Loaded default" ;// result.getRawString();
     }else{
-        ofLogError("Config: ")  << "Failed to parse file";
+        ofLogError("Config")  << "Failed to parse file";
     }
     // Check if the altconfig file exists, and load it if it does
     string altconfig = result["altconfig"].asString();
@@ -32,27 +32,25 @@ void ofApp::setup(){
     bool altParsingSuccessful = altresult.open(altconfig);
     ofSetLogLevel(OF_LOG_NOTICE);
     if (altParsingSuccessful){
-        ofLogNotice("Config: ") << "Loaded altconfig" ;//altresult.getRawString();
+        ofLogNotice("Config") << "Loaded altconfig" ;//altresult.getRawString();
         result = altresult;
     }else{
-        ofLogNotice("Config: ") << "No altconfig to load" ; //altresult.getRawString();
+        ofLogNotice("Config") << "No altconfig loaded (not found or error)" ; //altresult.getRawString();
     }
-
     // Setup base variables
-    
     if(result["debug"].asString() ==  "true"){
         ofLogToFile(result["audio_log"].asString(), true);
     }else{
         ofSetLogLevel(OF_LOG_ERROR);
     }
     ofLogNotice("STARTUP: "+ofGetTimestampString("%w %e %b %H:%M:%S%A" ));
-    int channels = result["audio_channels"].asDouble();
+    nChannels = result["audio_channels"].asDouble();
     audiodirectory = result["audio_path"].asString();
     startupsound = audiodirectory+'/'+result["audio_startup"].asString(); 
 
     // Initialise some sound control objects
-	mySounder = new ofSounder*[channels];
-	for (int i = 0; i < channels; i++){                            
+	mySounder = new ofSounder*[nChannels];
+	for (int i = 0; i < nChannels; i++){                            
 	    mySounder[i] = new ofSounder();
 	}
 
@@ -67,7 +65,7 @@ void ofApp::update(){
     ofLogLevel logLevel = ofGetLogLevel();  
 
     // Update all the sound objects
-    for (int i = 0; i < nSounders; i++){
+    for (int i = 0; i < nChannels; i++){
         mySounder[i]->update();
     }
 
@@ -80,106 +78,135 @@ void ofApp::update(){
 		// Get the next message
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
+				
+		// Check we have been sent a valid channel
+		int channel = -1;
+		int args = m.getNumArgs();
+		if(args>=1){
+			if( m.getArgType(0) == OFXOSC_TYPE_INT32){
+				channel = m.getArgAsInt32(0);
+				if(channel>nChannels){
+					ofLogNotice("osc error") << "channel [" <<channel<<"] out of range. max " << nChannels;
+					channel = -1;
+				}
+			}
+		}else{
+			ofLogNotice("osc error") << "no channel defined as OFXOSC_TYPE_INT32";
+		}
 
 		// Load a soundfile
-		if(m.getAddress() == "/load"){
-			int channel = m.getArgAsInt32(0);
+		if(m.getAddress() == "/load" && channel>=0){
 			string soundfile = audiodirectory+'/'+m.getArgAsString(1);
-			// Silence error TODO: Fix hack where audio class needs to load twice
-			ofSetLogLevel(OF_LOG_SILENT);
-	        mySounder[channel]->load(soundfile);
-	        ofSetLogLevel(logLevel);
-			ofLogNotice("osc:") << "/load [" << channel << "] " << soundfile;
-		}
-	    
+			// Check if the file exists
+			ofFile file (soundfile);   
+			if(file.exists()){
+				// Silence error TODO: Fix hack where audio class needs to load twice
+				ofSetLogLevel(OF_LOG_SILENT);
+	        	mySounder[channel]->load(soundfile);
+	        	ofSetLogLevel(logLevel);
+				ofLogNotice("osc") << "/load [" << channel << "] " << soundfile;
+			}else{
+				ofLogNotice("osc error") << "File doesn't exist \"/load [" << channel << "] " << soundfile; 
+			}
+		}	    
 	    // Unload a soundfile
-		if(m.getAddress() == "/unload"){
-			int channel = m.getArgAsInt32(0);
+		else if(m.getAddress() == "/unload" && channel>=0){
 		    mySounder[channel]->unload();
 			ofLogNotice("osc") << "/unload [" << channel << "]";
 		}
-	    
 	    // Play soundfile
-		else if(m.getAddress() == "/play"){
-			int channel = m.getArgAsInt32(0);
+		else if(m.getAddress() == "/play" && channel>=0){
 	        mySounder[channel]->play();
-			ofLogNotice("osc:") << "/play [" << channel << "] ";
+			ofLogNotice("osc") << "/play [" << channel << "] ";
 		}
-    	
     	// Stop soundfile
-		else if(m.getAddress() == "/stop"){
-			int channel = m.getArgAsInt32(0);
+		else if(m.getAddress() == "/stop" && channel>=0){
 	        mySounder[channel]->stop();
-			ofLogNotice("osc:") << "/stop [" << channel << "] ";
+			ofLogNotice("osc") << "/stop [" << channel << "] ";
 		}
-
         // Pause soundfile
-		else if(m.getAddress() == "/pause"){
-			int channel = m.getArgAsInt32(0);	
-			int paused = m.getArgAsInt32(1);
-	        mySounder[channel]->pause(paused);
-			ofLogNotice("osc:") << "/play [" << channel << "] ";
+		else if(m.getAddress() == "/pause" && channel>=0){
+			if(m.getArgType(1) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+				int paused = m.getArgAsInt32(1);
+	        	mySounder[channel]->pause(paused);
+				ofLogNotice("osc") << "/pause [" << channel << "] ";
+			}else{
+				ofLogNotice("osc error") << "/pause [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_INT32";
+			}
 		}
-
-
     	// Set the pitch of a channel
-    	else if(m.getAddress() == "/pitch"){
-			int channel = m.getArgAsInt32(0);
-	        float speed = m.getArgAsFloat(1);
-	        mySounder[channel]->setSpeed(speed);
-			ofLogNotice("osc:") << "/pitch [" << channel << "] pitch: " << speed;
+    	else if(m.getAddress() == "/pitch" && channel>=0){
+	    	if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 
+	    		float speed = m.getArgAsFloat(1);
+	        	mySounder[channel]->setSpeed(speed);
+				ofLogNotice("osc") << "/pitch [" << channel << "] pitch: " << speed;
+        	}else{
+				ofLogNotice("osc error") << "/pitch [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
         }
-
  	    // Set the volume of a channel
-    	else if(m.getAddress() == "/volume"){
-			int channel = m.getArgAsInt32(0);
-	        float vol = m.getArgAsFloat(1);
-	        mySounder[channel]->setVolume(vol);
-			ofLogNotice("osc:") << "/volume [" << channel << "] vol: " << vol;
+    	else if(m.getAddress() == "/volume" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 
+	        	float vol = m.getArgAsFloat(1);
+	        	mySounder[channel]->setVolume(vol);
+				ofLogNotice("osc") << "/volume [" << channel << "] vol: " << vol;
+        	}else{
+				ofLogNotice("osc error") << "/volume [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
         }
-
 	    // Set the pan of a channel
-    	else if(m.getAddress() == "/pan"){
-			int channel = m.getArgAsInt32(0);
-	        float pan = m.getArgAsFloat(1);
-	        mySounder[channel]->setPan(pan);
-			ofLogNotice("osc:") << "/pan [" << channel << "] pan: " << pan;
+    	else if(m.getAddress() == "/pan" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	float pan = m.getArgAsFloat(1);
+	        	mySounder[channel]->setPan(pan);
+				ofLogNotice("osc") << "/pan [" << channel << "] pan: " << pan;
+        	}else{
+				ofLogNotice("osc error") << "/pan [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
         }
-	    
 	    // Set the loop of a channel
-	    // TODO: Deal with the bool properly   
-    	else if(m.getAddress() == "/loop"){
-			int channel = m.getArgAsInt32(0);
-	        int loop = m.getArgAsInt32(1);
-	        mySounder[channel]->setLoop(loop);
-			ofLogNotice("osc:") << "/loop [" << channel << "] loop: " << loop;
+    	else if(m.getAddress() == "/loop" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 
+	        	int loop = m.getArgAsInt32(1);
+	        	mySounder[channel]->setLoop(loop);
+				ofLogNotice("osc") << "/loop [" << channel << "] loop: " << loop;
+        	}else{
+				ofLogNotice("osc error") << "/loop [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_INT32";
+        	}
         }
-	    
+        // Set the loop of a channel
+    	else if(m.getAddress() == "/loopplay" && channel>=0){
+	        mySounder[channel]->setLoop(1);
+	        mySounder[channel]->play();
+			ofLogNotice("osc") << "/loopplay [" << channel << "] loop: ";
+        }
 	    // Set the position of a channel
-    	else if(m.getAddress() == "/position"){
-			int channel = m.getArgAsInt32(0);
-	        float pos = m.getArgAsFloat(1);
-	        mySounder[channel]->setPosition(pos);
-			ofLogNotice("osc:") << "/position [" << channel << "] pos: " <<  pos;
+    	else if(m.getAddress() == "/position" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	float pos = m.getArgAsFloat(1);
+	        	mySounder[channel]->setPosition(pos);
+				ofLogNotice("osc") << "/position [" << channel << "] pos: " <<  pos;
+        	}else{
+				ofLogNotice("osc error") << "/position [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
         }
-	    
 	    // Set the multiplay of a channel
-	    // TODO: Deal with the bool properly
-    	else if(m.getAddress() == "/multiplay"){
-			int channel = m.getArgAsInt32(0);
-	        int mp = m.getArgAsInt32(1);
-	        mySounder[channel]->setMultiPlay(mp);
-			ofLogNotice("osc:") << "/multiplay [" << channel << "] mp: " << mp << "\n";
+    	else if(m.getAddress() == "/multiplay" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 	
+	        	int mp = m.getArgAsInt32(1);
+	        	mySounder[channel]->setMultiPlay(mp);
+				ofLogNotice("osc") << "/multiplay [" << channel << "] mp: " << mp << "\n";
+        	}else{
+				ofLogNotice("osc error") << "/multiplay [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_INT32";
+        	}
         }
-
         // Check for a file being sent 
         // note: the size of the file depends on network buffer sizes 
         // if an file is too big the message won't come through  
-        else if(m.getAddress() == "/file" ){
-            ofBuffer buffer = m.getArgAsBlob(0);
-            //receivedImage.loadImage(buffer); TODO: Enable audio transmission
-        }
-
+        //else if(m.getAddress() == "/file" ){
+        //    ofBuffer buffer = m.getArgAsBlob(0);
+        //    //receivedImage.loadImage(buffer); TODO: Enable audio transmission
+        //}
         // The message is unrecognised
 		else{
 			string msg_string;
@@ -204,12 +231,10 @@ void ofApp::update(){
 				}
 			}
 			// print the message to stdout
-			ofLogNotice("osc:") << msg_string;
+			ofLogNotice("osc error") << msg_string;
 		}
 
 	}
 
 }
-
-
 

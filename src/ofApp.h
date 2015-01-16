@@ -47,5 +47,5 @@ class ofApp : public ofBaseApp{
         ofxJSONElement altresult; 
         //------------------------Sound control objects
         ofSounder** mySounder;  
-        int nSounders;
+        int nChannels;
 };
