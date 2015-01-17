@@ -19,23 +19,51 @@
 ofSounder::ofSounder()
 {   
     // Setup some base variables
-	//soundfile = _soundfile;
-
-    // And get the initial sound going
-	//mysound.loadSound(soundfile);
-	mysound.setVolume(1.0f);
+    myvol = 1.0f;
+	mysound.setVolume(myvol);
     mysound.setMultiPlay(false);
-    //mysound.play();
     soundfile = "none";
+    state = "none";
+    myfade = 0.0f;
+    timepassed = ofGetElapsedTimeMicros(); // 1000000 microsecs = 1 second
+    timer = 1000000; // Perform an action every second
 }
 
 
 void ofSounder::update(){
- /* 
-    mysound.getIsPlaying()
-    mysound.setPlayer()
-    mysound.setPositionMS()
-  */
+	// A timeer to perform accurate fades
+	int currenttime = ofGetElapsedTimeMicros(); // 1000000 microsecs = 1 second
+	int elapsedtime = currenttime-timepassed;
+	bool tick = false;
+	if(elapsedtime>=timer){
+		timepassed = ofGetElapsedTimeMicros();
+		tick = true;
+	}
+	// Check if we need to fade in or out
+	if(state=="fadein" && tick){
+		myvol = myvol+myfade;
+		//cout << myvol << "\n";
+		if(myvol<1.0){
+			mysound.setVolume(myvol);
+		}else{
+			mysound.setVolume(1.0f);
+			state = "playing";
+		}
+	}
+	// Fadeout
+	else if(state=="fadeout" && tick){
+		myvol = myvol-myfade;
+		//cout << myvol << "\n";
+		if(myvol>0.0){
+			mysound.setVolume(myvol);  
+		}else{
+			mysound.setVolume(0.0f);
+			state = "playing";
+			myvol=0.0f;
+		}
+	}
+    //mysound.setPlayer()
+    //mysound.setPositionMS()
 }
 
 void ofSounder::load(string newsoundfile){
@@ -51,43 +79,69 @@ void ofSounder::load(string newsoundfile){
 
 void ofSounder::unload(){
 	mysound.unloadSound();
+	state = "none";
 	cout << "Unloaded: " << soundfile << "\n";
 }
 
-
-
 void ofSounder::play(){
+	state = "playing";
     mysound.play();
 }
 
 void ofSounder::stop(){
+	state = "stop";
     mysound.stop();
 }
 
 void ofSounder::pause(bool paused){
+	if(paused){
+		state = "pause1"; 
+	}else{
+		state = "pause0";
+	}
     mysound.setPaused(paused);
 }
 
 void ofSounder::setSpeed(float speed){
+	state = "speed";  
     mysound.setSpeed(speed);
 }
 
+void ofSounder::fadein(float fade, float time){
+	timer = int(time*1000000);
+	state = "fadein";
+	myvol = 0.0f;
+	mysound.setPaused(false);
+    myfade = fade;
+}
+
+void ofSounder::fadeout(float fade, float time){
+	timer = int(time*1000000);
+	state = "fadeout";  
+    myfade = fade;
+}
+
 void ofSounder::setPan(float pan){
+	state = "pan";  
     mysound.setPan(pan);
 }
 
-void ofSounder::setVolume(float vol){
+void ofSounder::setVolume(float vol){  
+	state = "volume";  
     mysound.setVolume(vol);
 }
 
 void ofSounder::setLoop(bool loop){
+	state = "loop";  
     mysound.setLoop(loop);
 }
 
 void ofSounder::setPosition(float pos){
+	state = "positon";  
     mysound.setPosition(pos);
 }
 
 void ofSounder::setMultiPlay(bool multi){
+	state = "multiplay";  
     mysound.setMultiPlay(multi);   
 }

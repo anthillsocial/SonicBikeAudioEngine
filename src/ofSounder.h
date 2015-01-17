@@ -30,6 +30,8 @@ class ofSounder {
         void unload();
         void play();
         void stop();
+        void fadeout(float fade, float time);
+        void fadein(float fade, float time);
         void pause(bool paused);
         void setSpeed(float speed);
         void setPan(float pan);
@@ -37,14 +39,19 @@ class ofSounder {
         void setLoop(bool loop);
         void setPosition(float pos);
         void setMultiPlay(bool multi);
-      
+
 		// constructor
 		ofSounder();
 
 		// variables
         string soundfile;
+        string state; 
         ofSoundPlayer  mysound;
         bool loaded;
+		float myfade;
+		float myvol;
+		int timepassed;
+		int timer;
 
 	private:
  
