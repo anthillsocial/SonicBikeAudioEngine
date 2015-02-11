@@ -44,7 +44,9 @@ example osc. Fadein channel 0: "/fadein 0 0.1 0.25"
 fadeout [int channel] [float volumeIncrement] [float everyNseconds]:<br />
 example osc. Fadeout channel 0: "/fadeout 0 0.1 0.25"
 
-
+Build instrctions
+====================
+make run
 
 License
 =====================

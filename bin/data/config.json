@@ -1,5 +1,5 @@
 {
-    "altconfig": "/home/sonic/bicrophonic1/config.json",
+    "altconfig": "/home/sonic/sdcard/config.json",
     "audio_path": "sounds/",
     "audio_startup":"startup.wav",
     "audio_channels": 200,
