@@ -67,12 +67,12 @@ void ofSounder::update(){
     //mysound.setPositionMS()
 }
 
-void ofSounder::load(string newsoundfile){
+void ofSounder::load(string newsoundfile, bool stream){
     // TODO: Seems to bug where unload sounds doesn't work & load needs to be called twice.
     //       Soooo... this hacky fix will do for now but should be properly sorted.
     //	     Need to check: ../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.cpp
     soundfile = newsoundfile;  
-	if( ! mysound.loadSound(soundfile) ){
+	if( ! mysound.loadSound(soundfile, stream) ){
         mysound.loadSound(soundfile); 
 	}
 	cout << "Attempted to load: " << soundfile << "\n";

@@ -120,16 +120,18 @@ void ofApp::update(){
 				float freemb = float(free)/1000.0; //ofLogNotice("freemb") << freemb;
 				float availmb = freemb-filesizemb; //ofLogNotice("availmb") << availmb;
 				if( (filesizemb*3) > availmb){
-					ofLogNotice("oscError") << "NoMemory (" << freemb << "mb) toLoadFile (" << filesizemb << "mb) | /load [" << channel << "]" << m.getArgAsString(1);
+					ofLogNotice("memoryIssue") << "Load as stream. Info (" << freemb << "mb) toLoadFile (" << filesizemb << "mb) | /load [" << channel << "]" << m.getArgAsString(1);
+				    // Could try streaming the file?
+				    mySounder[channel]->load(soundfile, true);
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
 					//ofLogNotice("start to load");
 					ofSetLogLevel(OF_LOG_SILENT);
-	        		mySounder[channel]->load(soundfile);
+	        		mySounder[channel]->load(soundfile, false);
 	        		ofSetLogLevel(logLevel);
-					ofLogNotice("osc") << "/load [" << channel << "] " << m.getArgAsString(1);
 					ofLogNotice("mem") 	<< "freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
 				}
+				ofLogNotice("osc") << "/load [" << channel << "] " << m.getArgAsString(1);
 			}else{
 				ofLogNotice("osc error") << "File doesn't exist \"/load [" << channel << "] " << soundfile; 
 			}
@@ -246,7 +248,7 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/position [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
-	    // Set the pitch of all channels, unless otherwise stated with the 'masspitch' variable
+	    // Set the pitch of all channels if the 'masspitch' variable has been set to 1
     	else if(m.getAddress() == "/masspitch"){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float pitch = m.getArgAsFloat(0);
