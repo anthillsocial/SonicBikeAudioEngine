@@ -73,7 +73,7 @@ void ofSounder::load(string newsoundfile, bool stream){
     //	     Need to check: ../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.cpp
     soundfile = newsoundfile;  
 	if( ! mysound.loadSound(soundfile, stream) ){
-        mysound.loadSound(soundfile); 
+        mysound.loadSound(soundfile, stream); 
 	}
 	cout << "Attempted to load: " << soundfile << "\n";
 }
