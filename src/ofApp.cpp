@@ -246,6 +246,35 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/position [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
+	    // Set the pitch of all channels, unless otherwise stated with the 'masspitch' variable
+    	else if(m.getAddress() == "/masspitch"){
+	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	float pitch = m.getArgAsFloat(0);
+	        	for (int i = 0; i < nChannels; i++){
+	        	    if(mySounder[i]->masschange == true){
+                        ofLogNotice("massvchangeTrue:") << i;
+                        mySounder[i]->setSpeed(pitch);
+	        	    }
+	        	}
+				ofLogNotice("osc") << "/masspitch " <<  pitch;
+        	}else{
+				ofLogNotice("osc error") << "/masspitch | var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
+        }
+        // Can this channel be changed as part of a 'masspitch' or 'massposition' command
+    	else if(m.getAddress() == "/masschange"  && channel>=0){
+	        if(m.getArgType(0) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	int change = m.getArgAsInt32(1);
+	        	if(change==1){
+	        	    mySounder[channel]->setMassChange(true);
+	        	}else{
+                    mySounder[channel]->setMassChange(false);
+	        	}
+				ofLogNotice("osc") << "/masschange [" << channel << "] change: " <<  change;
+        	}else{
+				ofLogNotice("osc error") << "/masschange [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_INT32";
+        	}
+        }
 	    // Set the multiplay of a channel
     	else if(m.getAddress() == "/multiplay" && channel>=0){
 	        if(m.getArgType(1) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 	

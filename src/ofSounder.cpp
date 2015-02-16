@@ -19,6 +19,7 @@
 ofSounder::ofSounder()
 {   
     // Setup some base variables
+    masschange = false;
     myvol = 1.0f;
 	mysound.setVolume(myvol);
     mysound.setMultiPlay(false);
@@ -145,3 +146,7 @@ void ofSounder::setMultiPlay(bool multi){
 	state = "multiplay";  
     mysound.setMultiPlay(multi);   
 }
+void ofSounder::setMassChange(bool change){
+	masschange = change;   
+}
+

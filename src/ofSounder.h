@@ -39,6 +39,7 @@ class ofSounder {
         void setLoop(bool loop);
         void setPosition(float pos);
         void setMultiPlay(bool multi);
+        void setMassChange(bool multi);   
 
 		// constructor
 		ofSounder();
@@ -48,6 +49,7 @@ class ofSounder {
         string state; 
         ofSoundPlayer  mysound;
         bool loaded;
+        bool masschange;
 		float myfade;
 		float myvol;
 		int timepassed;
