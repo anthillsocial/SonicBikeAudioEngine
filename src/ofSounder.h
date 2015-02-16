@@ -26,7 +26,7 @@ class ofSounder {
 
 		// methods
 		void update();
-        void load(string newsoundfile);
+        void load(string newsoundfile, bool stream);
         void unload();
         void play();
         void stop();
