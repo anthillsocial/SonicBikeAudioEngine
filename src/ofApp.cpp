@@ -248,19 +248,33 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/position [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
-	    // Set the pitch of all channels if the 'masspitch' variable has been set to 1
+	    // Set the pitch of all channels if the 'masschange' variable has been set to 1
     	else if(m.getAddress() == "/masspitch"){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float pitch = m.getArgAsFloat(0);
 	        	for (int i = 0; i < nChannels; i++){
 	        	    if(mySounder[i]->masschange == true){
-                        ofLogNotice("massvchangeTrue:") << i;
+						//ofLogNotice("massvchangeTrue:") << i;
                         mySounder[i]->setSpeed(pitch);
 	        	    }
 	        	}
 				ofLogNotice("osc") << "/masspitch " <<  pitch;
         	}else{
 				ofLogNotice("osc error") << "/masspitch | var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
+        }
+	    // Set the volume of all channels if the 'masschange' variable has been set to 1
+    	else if(m.getAddress() == "/massvolume"){
+	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	float vol = m.getArgAsFloat(0);
+	        	for (int i = 0; i < nChannels; i++){
+	        	    if(mySounder[i]->masschange == true){
+                        mySounder[i]->setVolume(vol);
+	        	    }
+	        	}
+				ofLogNotice("osc") << "/massvolume " <<  vol;
+        	}else{
+				ofLogNotice("osc error") << "/massvolume | var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
         // Can this channel be changed as part of a 'masspitch' or 'massposition' command
