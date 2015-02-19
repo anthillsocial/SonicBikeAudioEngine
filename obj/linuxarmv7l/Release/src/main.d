@@ -1,5 +1,4 @@
 obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
- ../../../libs/openFrameworks/ofMain.h \
  ../../../libs/openFrameworks/utils/ofConstants.h \
  ../../../libs/tess2/include/tesselator.h \
  ../../../libs/openFrameworks/utils/ofFileUtils.h \
@@ -66,6 +65,32 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
  ../../../libs/openFrameworks/graphics/ofPixels.h \
  ../../../libs/openFrameworks/math/ofMatrix4x4.h \
  ../../../libs/openFrameworks/math/ofQuaternion.h \
+ ../../../libs/openFrameworks/types/ofParameter.h \
+ ../../../libs/openFrameworks/types/ofParameterGroup.h \
+ ../../../libs/poco/include/Poco/Any.h \
+ ../../../libs/openFrameworks/math/ofVectorMath.h \
+ ../../../libs/openFrameworks/math/ofMatrix3x3.h \
+ ../../../libs/openFrameworks/gl/ofFbo.h \
+ ../../../libs/openFrameworks/gl/ofTexture.h \
+ ../../../libs/openFrameworks/gl/ofVboMesh.h \
+ ../../../libs/openFrameworks/gl/ofVbo.h \
+ ../../../libs/openFrameworks/gl/ofGLUtils.h \
+ ../../../libs/openFrameworks/gl/ofGLRenderer.h \
+ ../../../libs/openFrameworks/graphics/ofPolyline.h \
+ ../../../libs/openFrameworks/graphics/ofGraphics.h \
+ ../../../libs/openFrameworks/utils/ofMatrixStack.h \
+ ../../../libs/openFrameworks/app/ofBaseApp.h \
+ ../../../libs/openFrameworks/app/ofAppRunner.h \
+ ../../../libs/openFrameworks/sound/ofSoundStream.h \
+ ../../../libs/openFrameworks/sound/ofBaseSoundStream.h \
+ ../../../libs/openFrameworks/sound/ofRtAudioSoundStream.h \
+ ../../../libs/openFrameworks/sound/ofSoundPlayer.h \
+ ../../../libs/openFrameworks/sound/ofBaseSoundPlayer.h \
+ ../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.h \
+ ../../../libs/kiss/include/kiss_fft.h \
+ ../../../libs/kiss/include/kiss_fftr.h \
+ ../../../libs/kiss/include/kiss_fft.h src/ofApp.h \
+ ../../../libs/openFrameworks/ofMain.h \
  ../../../libs/openFrameworks/utils/ofXml.h \
  ../../../libs/poco/include/Poco/DOM/Document.h \
  ../../../libs/poco/include/Poco/XML/XML.h \
@@ -112,22 +137,8 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
  ../../../libs/poco/include/Poco/DOM/NamedNodeMap.h \
  ../../../libs/poco/include/Poco/DOM/ChildNodesList.h \
  ../../../libs/poco/include/Poco/DOM/NodeList.h \
- ../../../libs/openFrameworks/types/ofParameter.h \
- ../../../libs/openFrameworks/types/ofParameterGroup.h \
- ../../../libs/poco/include/Poco/Any.h \
- ../../../libs/openFrameworks/math/ofVectorMath.h \
- ../../../libs/openFrameworks/math/ofMatrix3x3.h \
  ../../../libs/openFrameworks/communication/ofSerial.h \
  ../../../libs/openFrameworks/communication/ofArduino.h \
- ../../../libs/openFrameworks/gl/ofFbo.h \
- ../../../libs/openFrameworks/gl/ofTexture.h \
- ../../../libs/openFrameworks/gl/ofVboMesh.h \
- ../../../libs/openFrameworks/gl/ofVbo.h \
- ../../../libs/openFrameworks/gl/ofGLUtils.h \
- ../../../libs/openFrameworks/gl/ofGLRenderer.h \
- ../../../libs/openFrameworks/graphics/ofPolyline.h \
- ../../../libs/openFrameworks/graphics/ofGraphics.h \
- ../../../libs/openFrameworks/utils/ofMatrixStack.h \
  ../../../libs/openFrameworks/gl/ofLight.h \
  ../../../libs/openFrameworks/3d/ofNode.h \
  ../../../libs/openFrameworks/3d/of3dUtils.h \
@@ -149,17 +160,6 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
  ../../../libs/openFrameworks/graphics/ofImage.h \
  ../../../libs/openFrameworks/graphics/ofRendererCollection.h \
  ../../../libs/openFrameworks/graphics/ofTrueTypeFont.h \
- ../../../libs/openFrameworks/app/ofBaseApp.h \
- ../../../libs/openFrameworks/app/ofAppRunner.h \
- ../../../libs/openFrameworks/sound/ofSoundStream.h \
- ../../../libs/openFrameworks/sound/ofBaseSoundStream.h \
- ../../../libs/openFrameworks/sound/ofRtAudioSoundStream.h \
- ../../../libs/openFrameworks/sound/ofSoundPlayer.h \
- ../../../libs/openFrameworks/sound/ofBaseSoundPlayer.h \
- ../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.h \
- ../../../libs/kiss/include/kiss_fft.h \
- ../../../libs/kiss/include/kiss_fftr.h \
- ../../../libs/kiss/include/kiss_fft.h \
  ../../../libs/openFrameworks/video/ofVideoGrabber.h \
  ../../../libs/openFrameworks/video/ofGstVideoGrabber.h \
  ../../../libs/openFrameworks/video/ofGstUtils.h \
@@ -305,7 +305,7 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
  ../../../libs/openFrameworks/video/ofVideoPlayer.h \
  ../../../libs/openFrameworks/video/ofGstVideoPlayer.h \
  ../../../libs/openFrameworks/3d/ofCamera.h \
- ../../../libs/openFrameworks/3d/ofEasyCam.h src/ofApp.h \
+ ../../../libs/openFrameworks/3d/ofEasyCam.h \
  ../../../addons/ofxJSON/src/ofxJSON.h \
  ../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h \
  ../../../addons/ofxJSON/src/ofxJSONElement.h src/ofSounder.h \
@@ -326,8 +326,6 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
  ../../../addons/ofxOsc/libs/oscpack/src/ip/NetworkingUtils.h \
  ../../../addons/ofxOsc/libs/oscpack/src/ip/IpEndpointName.h \
  ../../../libs/openFrameworks/app/ofAppNoWindow.h
-
-../../../libs/openFrameworks/ofMain.h:
 
 ../../../libs/openFrameworks/utils/ofConstants.h:
 
@@ -461,6 +459,60 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
 
 ../../../libs/openFrameworks/math/ofQuaternion.h:
 
+../../../libs/openFrameworks/types/ofParameter.h:
+
+../../../libs/openFrameworks/types/ofParameterGroup.h:
+
+../../../libs/poco/include/Poco/Any.h:
+
+../../../libs/openFrameworks/math/ofVectorMath.h:
+
+../../../libs/openFrameworks/math/ofMatrix3x3.h:
+
+../../../libs/openFrameworks/gl/ofFbo.h:
+
+../../../libs/openFrameworks/gl/ofTexture.h:
+
+../../../libs/openFrameworks/gl/ofVboMesh.h:
+
+../../../libs/openFrameworks/gl/ofVbo.h:
+
+../../../libs/openFrameworks/gl/ofGLUtils.h:
+
+../../../libs/openFrameworks/gl/ofGLRenderer.h:
+
+../../../libs/openFrameworks/graphics/ofPolyline.h:
+
+../../../libs/openFrameworks/graphics/ofGraphics.h:
+
+../../../libs/openFrameworks/utils/ofMatrixStack.h:
+
+../../../libs/openFrameworks/app/ofBaseApp.h:
+
+../../../libs/openFrameworks/app/ofAppRunner.h:
+
+../../../libs/openFrameworks/sound/ofSoundStream.h:
+
+../../../libs/openFrameworks/sound/ofBaseSoundStream.h:
+
+../../../libs/openFrameworks/sound/ofRtAudioSoundStream.h:
+
+../../../libs/openFrameworks/sound/ofSoundPlayer.h:
+
+../../../libs/openFrameworks/sound/ofBaseSoundPlayer.h:
+
+../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.h:
+
+../../../libs/kiss/include/kiss_fft.h:
+
+../../../libs/kiss/include/kiss_fftr.h:
+
+../../../libs/kiss/include/kiss_fft.h:
+
+src/ofApp.h:
+
+../../../libs/openFrameworks/ofMain.h:
+
 ../../../libs/openFrameworks/utils/ofXml.h:
 
 ../../../libs/poco/include/Poco/DOM/Document.h:
@@ -553,37 +605,9 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
 
 ../../../libs/poco/include/Poco/DOM/NodeList.h:
 
-../../../libs/openFrameworks/types/ofParameter.h:
-
-../../../libs/openFrameworks/types/ofParameterGroup.h:
-
-../../../libs/poco/include/Poco/Any.h:
-
-../../../libs/openFrameworks/math/ofVectorMath.h:
-
-../../../libs/openFrameworks/math/ofMatrix3x3.h:
-
 ../../../libs/openFrameworks/communication/ofSerial.h:
 
 ../../../libs/openFrameworks/communication/ofArduino.h:
-
-../../../libs/openFrameworks/gl/ofFbo.h:
-
-../../../libs/openFrameworks/gl/ofTexture.h:
-
-../../../libs/openFrameworks/gl/ofVboMesh.h:
-
-../../../libs/openFrameworks/gl/ofVbo.h:
-
-../../../libs/openFrameworks/gl/ofGLUtils.h:
-
-../../../libs/openFrameworks/gl/ofGLRenderer.h:
-
-../../../libs/openFrameworks/graphics/ofPolyline.h:
-
-../../../libs/openFrameworks/graphics/ofGraphics.h:
-
-../../../libs/openFrameworks/utils/ofMatrixStack.h:
 
 ../../../libs/openFrameworks/gl/ofLight.h:
 
@@ -632,28 +656,6 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
 ../../../libs/openFrameworks/graphics/ofRendererCollection.h:
 
 ../../../libs/openFrameworks/graphics/ofTrueTypeFont.h:
-
-../../../libs/openFrameworks/app/ofBaseApp.h:
-
-../../../libs/openFrameworks/app/ofAppRunner.h:
-
-../../../libs/openFrameworks/sound/ofSoundStream.h:
-
-../../../libs/openFrameworks/sound/ofBaseSoundStream.h:
-
-../../../libs/openFrameworks/sound/ofRtAudioSoundStream.h:
-
-../../../libs/openFrameworks/sound/ofSoundPlayer.h:
-
-../../../libs/openFrameworks/sound/ofBaseSoundPlayer.h:
-
-../../../libs/openFrameworks/sound/ofOpenALSoundPlayer.h:
-
-../../../libs/kiss/include/kiss_fft.h:
-
-../../../libs/kiss/include/kiss_fftr.h:
-
-../../../libs/kiss/include/kiss_fft.h:
 
 ../../../libs/openFrameworks/video/ofVideoGrabber.h:
 
@@ -972,8 +974,6 @@ obj/linuxarmv7l/Release/src/main.o: src/main.cpp \
 ../../../libs/openFrameworks/3d/ofCamera.h:
 
 ../../../libs/openFrameworks/3d/ofEasyCam.h:
-
-src/ofApp.h:
 
 ../../../addons/ofxJSON/src/ofxJSON.h:
 

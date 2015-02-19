@@ -294,7 +294,7 @@ void ofApp::update(){
         	}
         }
         // Set all channels marked masschange to superloop
-    	else if(m.getAddress() == "/masssuperlooper" && channel>=0){
+    	else if(m.getAddress() == "/masssuperlooper"){
 	        if(m.getArgType(1) == OFXOSC_TYPE_STRING &&  m.getArgType(2) == OFXOSC_TYPE_FLOAT && m.getArgType(3) == OFXOSC_TYPE_FLOAT ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	string command = m.getArgAsString(1); 
 	        	float pos = m.getArgAsFloat(2);
@@ -325,7 +325,7 @@ void ofApp::update(){
         	}
         }
         // Set the superPitch of a channel
-    	else if(m.getAddress() == "/masssuperpitch" && channel>=0){
+    	else if(m.getAddress() == "/masssuperpitch"){
 	        if(m.getArgType(1) == OFXOSC_TYPE_STRING && m.getArgType(2)==OFXOSC_TYPE_FLOAT && m.getArgType(3)==OFXOSC_TYPE_FLOAT && m.getArgType(4) == OFXOSC_TYPE_FLOAT && OFXOSC_TYPE_FLOAT && m.getArgType(5) ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	string command = m.getArgAsString(1);
 	        	float inc = m.getArgAsFloat(2);  
