@@ -20,49 +20,96 @@ ofSounder::ofSounder()
 {   
     // Setup some base variables
     masschange = false;
-    myvol = 1.0f;
-	mysound.setVolume(myvol);
+    fadervol = 1.0f;
+	mysound.setVolume(fadervol);
     mysound.setMultiPlay(false);
     soundfile = "none";
     state = "none";
-    myfade = 0.0f;
-    timepassed = ofGetElapsedTimeMicros(); // 1000000 microsecs = 1 second
-    timer = 1000000; // Perform an action every second
+    // Fader
+    faderstate = "none";
+    faderfade = 0.0f;
+    fadertimepassed = ofGetElapsedTimeMicros(); // 1000000 microsecs = 1 second
+    fadertimer = 1000000; // Perform an action every second
+    // Superlooper
+    superloopercommand = "off";
+    superlooperlen = 0.0f;
+    superlooperpos = 0.0f;
+    superloopertimepassed = 0;
+    // Super pitch
+    superpitchcommand = "off";
+    superpitchspeed = 0.0f;
+    superpitchinc = 0.0f;
+    superpitchmax = 0.0f;
+    superpitchmin = 0.0f;
+    superpitchtimepassed = 0;
+    superpitchpitch = 1.0;
 }
 
 
 void ofSounder::update(){
-	// A timeer to perform accurate fades
 	int currenttime = ofGetElapsedTimeMicros(); // 1000000 microsecs = 1 second
-	int elapsedtime = currenttime-timepassed;
-	bool tick = false;
-	if(elapsedtime>=timer){
-		timepassed = ofGetElapsedTimeMicros();
-		tick = true;
+	
+	// Perform smooth fades
+	int faderelapsedtime = currenttime-fadertimepassed;
+	bool fadertick = false;
+	if(faderelapsedtime>=fadertimer){
+		fadertimepassed = ofGetElapsedTimeMicros();
+		fadertick = true;
 	}
 	// Check if we need to fade in or out
-	if(state=="fadein" && tick){
-		myvol = myvol+myfade;
+	if(faderstate=="fadein" && fadertick){
+		fadervol = fadervol+faderfade;
 		//cout << myvol << "\n";
-		if(myvol<1.0){
-			mysound.setVolume(myvol);
+		if(fadervol<1.0){
+			mysound.setVolume(fadervol);
 		}else{
 			mysound.setVolume(1.0f);
-			state = "playing";
+			faderstate = "playing";
 		}
 	}
 	// Fadeout
-	else if(state=="fadeout" && tick){
-		myvol = myvol-myfade;
+	else if(faderstate=="fadeout" && fadertick){
+		fadervol = fadervol-faderfade;
 		//cout << myvol << "\n";
-		if(myvol>0.0){
-			mysound.setVolume(myvol);  
+		if(fadervol>0.0){
+			mysound.setVolume(fadervol);  
 		}else{
 			mysound.setVolume(0.0f);
-			state = "playing";
-			myvol=0.0f;
+			faderstate = "playing";
+			fadervol=0.0f;
 		}
 	}
+
+	// Set super looper
+	if(superloopercommand=="on"){   
+	    int superlooperelapsedtime = currenttime-superloopertimepassed; 
+        if(superlooperelapsedtime>=superlooperlen){
+            superloopertimepassed = ofGetElapsedTimeMicros();  
+            mysound.setPosition(superlooperpos); 
+        }
+    }
+
+	// Set super pitch
+	if(superpitchcommand!="off"){   
+	    int superpitchelapsedtime = currenttime-superpitchtimepassed; 
+        if(superpitchelapsedtime>=superpitchspeed){
+            superpitchtimepassed = ofGetElapsedTimeMicros();  
+            if(superpitchcommand=="up"){  
+                superpitchpitch = superpitchpitch+superpitchinc;
+            }else{
+                superpitchpitch = superpitchpitch-superpitchinc;
+            }
+            // Make sure we keep iun range
+            if(superpitchpitch > superpitchmax){
+                superpitchpitch = superpitchmax;
+            }else if(superpitchpitch < superpitchmin){
+                superpitchpitch = superpitchmin;
+            }
+            // Now set the pitch
+            mysound.setSpeed(superpitchpitch); 
+        }
+    }
+
     //mysound.setPlayer()
     //mysound.setPositionMS()
 }
@@ -109,17 +156,17 @@ void ofSounder::setSpeed(float speed){
 }
 
 void ofSounder::fadein(float fade, float time){
-	timer = int(time*1000000);
-	state = "fadein";
-	myvol = 0.0f;
+	fadertimer = int(time*1000000);
+	faderstate = "fadein";
+	fadervol = 0.0f;
 	mysound.setPaused(false);
-    myfade = fade;
+    faderfade = fade;
 }
 
 void ofSounder::fadeout(float fade, float time){
-	timer = int(time*1000000);
-	state = "fadeout";  
-    myfade = fade;
+	fadertimer = int(time*1000000);
+	faderstate = "fadeout";  
+    faderfade = fade;
 }
 
 void ofSounder::setPan(float pan){
@@ -141,7 +188,18 @@ void ofSounder::setPosition(float pos){
 	state = "positon";  
     mysound.setPosition(pos);
 }
-
+void ofSounder::setSuperLooper(string command, float pos, float len){
+	superloopercommand = command; // on off  
+    superlooperpos = pos;
+    superlooperlen = len*1000000.0;
+}
+void ofSounder::setSuperPitch(string command, float inc, float speed, float max, float min){
+    superpitchcommand = command; // up down off
+    superpitchinc = inc; 
+    superpitchspeed = speed*1000000.0;     // how quickly to change  
+    superpitchmax = max;
+    superpitchmin = min;
+}
 void ofSounder::setMultiPlay(bool multi){
 	state = "multiplay";  
     mysound.setMultiPlay(multi);   

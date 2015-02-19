@@ -38,6 +38,7 @@ void ofApp::setup(){
         ofLogNotice("Config") << "No altconfig loaded (not found or error)" ; //altresult.getRawString();
     }
     // Setup base variables
+    canstream = false; // Can we stream rather than load in memory?
     if(result["debug"].asString() ==  "true"){
         ofLogToFile(result["audio_log"].asString(), true);
     }else{
@@ -46,8 +47,7 @@ void ofApp::setup(){
     ofLogNotice("STARTUP: "+ofGetTimestampString("%w %e %b %H:%M:%S%A" ));
     nChannels = result["audio_channels"].asDouble();
     audiodirectory = result["audio_path"].asString();
-    startupsound = audiodirectory+'/'+result["audio_startup"].asString(); 
-
+    
     // Initialise some sound control objects
 	mySounder = new ofSounder*[nChannels];
 	for (int i = 0; i < nChannels; i++){                            
@@ -111,7 +111,7 @@ void ofApp::update(){
 				while (gotfree==false){
 					free = ofToInt(ofTkSystem("free | grep Mem | awk '{print $4}'")); 
 					ofLogNotice("free") << free;
-					if(inc>20 || free > 0){
+					if(inc>10 || free > 0){
 						gotfree = true;
 					}
 					inc++;
@@ -122,7 +122,9 @@ void ofApp::update(){
 				if( (filesizemb*3) > availmb){
 					ofLogNotice("memoryIssue") << "Load as stream. Info (" << freemb << "mb) toLoadFile (" << filesizemb << "mb) | /load [" << channel << "]" << m.getArgAsString(1);
 				    // Could try streaming the file?
-				    mySounder[channel]->load(soundfile, true);
+				    if(canstream){
+				        mySounder[channel]->load(soundfile, true);
+				    }
 				}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
 					//ofLogNotice("start to load");
@@ -148,6 +150,38 @@ void ofApp::update(){
 		// Clear all the memory
 		else if(m.getAddress() == "/clear"){  
 			exit();
+		}
+		// Set the audio directory
+		else if(m.getAddress() == "/setaudiodir"){  
+		    if(m.getArgType(0) == OFXOSC_TYPE_STRING){
+			    audiodirectory = m.getArgAsString(0);
+			    ofLogNotice("osc") << "/setaudiodir " << audiodirectory;
+		    }else{
+                ofLogNotice("oscerror") << "/setaudiodir NOTSTRING";
+		    }
+		}
+        // Set a directory for random files to be selected from
+		else if(m.getAddress() == "/setrandomdir"){  
+			if(m.getArgType(0) == OFXOSC_TYPE_STRING){
+			    randomdirectory = m.getArgAsString(0);
+			    ofLogNotice("osc") << "/setrandomdir " << randomdirectory;
+			}else{
+                ofLogNotice("oscerror") << "/setrandomdir NOTSTRING";
+			}
+		}
+	    // Set if we can stream or not
+		else if(m.getAddress() == "/setcanstream"){  
+            if(m.getArgType(0)==OFXOSC_TYPE_INT32){
+			    int resp = m.getArgAsInt32(0);
+			    if(resp==1){
+			        canstream = true;
+			    }else{
+                    canstream = false; 
+			    }
+			    ofLogNotice("osc") << "/setcanstream " << resp;
+			}else{
+			    ofLogNotice("oscerror") << "/setcanstream NOTINT";
+            }
 		}
 	    // Play soundfile
 		else if(m.getAddress() == "/play" && channel>=0){
@@ -201,7 +235,6 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/fadeout [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
-
  	    // Set the volume of a channel
     	else if(m.getAddress() == "/volume" && channel>=0){
 	        if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING 
@@ -248,6 +281,32 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/position [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
+        // Set the superlooper of a channel
+    	else if(m.getAddress() == "/superlooper" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_STRING &&  m.getArgType(2) == OFXOSC_TYPE_FLOAT && m.getArgType(3) == OFXOSC_TYPE_FLOAT ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	string command = m.getArgAsString(1); 
+	        	float pos = m.getArgAsFloat(2);
+	        	float len = m.getArgAsFloat(3);
+	        	mySounder[channel]->setSuperLooper(command, pos, len);
+				ofLogNotice("osc") << "/superlooper [" << channel << "] command(on|off):" << command << " pos: " <<  pos << " len: " << len << " " << mySounder[channel]->soundfile;
+        	}else{
+				ofLogNotice("osc error") << "/superlooper [" << channel << "] " << "| vars not recognised as: string(on|off) float float";
+        	}
+        }
+        // Set the superPitch of a channel
+    	else if(m.getAddress() == "/superpitch" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_STRING && m.getArgType(2)==OFXOSC_TYPE_FLOAT && m.getArgType(3)==OFXOSC_TYPE_FLOAT && m.getArgType(4) == OFXOSC_TYPE_FLOAT && OFXOSC_TYPE_FLOAT && m.getArgType(5) ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	string command = m.getArgAsString(1);
+	        	float inc = m.getArgAsFloat(2);  
+	        	float speed = m.getArgAsFloat(3);
+	        	float max = m.getArgAsFloat(4);
+	        	float min = m.getArgAsFloat(5);
+	        	mySounder[channel]->setSuperPitch(command, inc, speed, max, min);
+				ofLogNotice("osc") << "/superpitch [" << channel << "] command: " <<  command << " inc:" << inc << " speed: " << speed << " max: " << max << " min:" << min << " " << mySounder[channel]->soundfile;
+        	}else{
+				ofLogNotice("osc error") << "/superpitch [" << channel << "] " << "| vars not recognised as: string,float,float";
+        	}
+        }
 	    // Set the pitch of all channels if the 'masschange' variable has been set to 1
     	else if(m.getAddress() == "/masspitch"){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
@@ -275,6 +334,20 @@ void ofApp::update(){
 				ofLogNotice("osc") << "/massvolume " <<  vol;
         	}else{
 				ofLogNotice("osc error") << "/massvolume | var 1 not recognised as OFXOSC_TYPE_FLOAT";
+        	}
+        }
+        // Set the superlooper if the 'masschange' variable has been set to 1
+    	else if(m.getAddress() == "/masslooper"){
+	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	float vol = m.getArgAsFloat(0);
+	        	for (int i = 0; i < nChannels; i++){
+	        	    if(mySounder[i]->masschange == true){
+                        mySounder[i]->setVolume(vol);
+	        	    }
+	        	}
+				ofLogNotice("osc") << "/masslooper " <<  vol;
+        	}else{
+				ofLogNotice("osc error") << "/masslooper | var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
         }
         // Can this channel be changed as part of a 'masspitch' or 'massposition' command

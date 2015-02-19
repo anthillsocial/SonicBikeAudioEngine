@@ -20,8 +20,11 @@ Api
 load [int channel] [string filename]
 Example osc. Load a soundfile in channel 0: "/load 0 asoundfile.wav"
 
-unload [int channel]
+unload [int channel]<br />
 Example osc. Free memory in channel 0: "/unload 0"
+
+setaudodir [string directorypath/] <br />
+Example osc. Set the audio directiry: "/setaudodir /home/user/Desktop/sounds"
 
 play [int channel]
 Example osc. Play channel 0 from start to end: "/play 0"
@@ -34,6 +37,12 @@ Example osc. Set channel 0 to loop when its played next: "/loop 0 1"
 
 loopplay [int channel]
 Example osc. Start playing channel 0 in a loop: "/loopplay 0 1"
+
+superlooper [int channel, float position(0.0-1.0), float length(seconds)] 
+Example OSC. Loop a sound in channel 0 from postion 0.2 for 1.5 seconds: "/superlooper 0 0.2 1.5"
+
+superpitch [int channel, string("u","d"), float speed(0.1-100 seconds) float max(0.0-20.0), float min(0.0-20.0)] 
+Example OSC. Loop a sound in channel 0 from postion 0.2 for 1.5 seconds: "/superlooper 0 0.2 1.5"
 
 pause [int channel] [int start(1) | stop(0)]
 Example osc. Start playing channel 0: "/pause 0 1"

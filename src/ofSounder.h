@@ -40,6 +40,8 @@ class ofSounder {
         void setPosition(float pos);
         void setMultiPlay(bool multi);
         void setMassChange(bool multi);   
+        void setSuperLooper(string command, float pos, float len);
+        void setSuperPitch(string command, float inc, float speed, float max, float min);
 
 		// constructor
 		ofSounder();
@@ -50,10 +52,25 @@ class ofSounder {
         ofSoundPlayer  mysound;
         bool loaded;
         bool masschange;
-		float myfade;
-		float myvol;
-		int timepassed;
-		int timer;
+		
+		string faderstate; 
+		float faderfade;
+		float fadervol;
+		int fadertimepassed;
+		int fadertimer;
+
+		string superloopercommand;
+		float superlooperpos;
+		float superlooperlen; 
+        float superloopertimepassed;
+
+        string superpitchcommand;
+		float superpitchspeed; 
+		float superpitchinc;
+        float superpitchmax;
+        float superpitchmin;
+        float superpitchtimepassed; 
+        float superpitchpitch;
 
 	private:
  

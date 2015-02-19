@@ -50,4 +50,6 @@ class ofApp : public ofBaseApp{
         //------------------------Sound control objects
         ofSounder** mySounder;  
         int nChannels;
+        bool canstream;
+        string randomdirectory;
 };
