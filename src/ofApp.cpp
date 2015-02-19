@@ -293,6 +293,23 @@ void ofApp::update(){
 				ofLogNotice("osc error") << "/superlooper [" << channel << "] " << "| vars not recognised as: string(on|off) float float";
         	}
         }
+        // Set all channels marked masschange to superloop
+    	else if(m.getAddress() == "/masssuperlooper" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_STRING &&  m.getArgType(2) == OFXOSC_TYPE_FLOAT && m.getArgType(3) == OFXOSC_TYPE_FLOAT ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	string command = m.getArgAsString(1); 
+	        	float pos = m.getArgAsFloat(2);
+	        	float len = m.getArgAsFloat(3);
+                for (int i = 0; i < nChannels; i++){
+	        	    if(mySounder[i]->masschange == true){
+                        mySounder[channel]->setSuperLooper(command, pos, len);
+	        	    }
+	        	}
+				ofLogNotice("osc") << "/masssuperlooper [" << channel << "] command(on|off):" << command << " pos: " <<  pos << " len: " << len << " " << mySounder[channel]->soundfile;
+        	}else{
+				ofLogNotice("osc error") << "/masssuperlooper [" << channel << "] " << "| vars not recognised as: string(on|off) float float";
+        	}
+        }
+
         // Set the superPitch of a channel
     	else if(m.getAddress() == "/superpitch" && channel>=0){
 	        if(m.getArgType(1) == OFXOSC_TYPE_STRING && m.getArgType(2)==OFXOSC_TYPE_FLOAT && m.getArgType(3)==OFXOSC_TYPE_FLOAT && m.getArgType(4) == OFXOSC_TYPE_FLOAT && OFXOSC_TYPE_FLOAT && m.getArgType(5) ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
@@ -305,6 +322,24 @@ void ofApp::update(){
 				ofLogNotice("osc") << "/superpitch [" << channel << "] command: " <<  command << " inc:" << inc << " speed: " << speed << " max: " << max << " min:" << min << " " << mySounder[channel]->soundfile;
         	}else{
 				ofLogNotice("osc error") << "/superpitch [" << channel << "] " << "| vars not recognised as: string,float,float";
+        	}
+        }
+        // Set the superPitch of a channel
+    	else if(m.getAddress() == "/masssuperpitch" && channel>=0){
+	        if(m.getArgType(1) == OFXOSC_TYPE_STRING && m.getArgType(2)==OFXOSC_TYPE_FLOAT && m.getArgType(3)==OFXOSC_TYPE_FLOAT && m.getArgType(4) == OFXOSC_TYPE_FLOAT && OFXOSC_TYPE_FLOAT && m.getArgType(5) ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	string command = m.getArgAsString(1);
+	        	float inc = m.getArgAsFloat(2);  
+	        	float speed = m.getArgAsFloat(3);
+	        	float max = m.getArgAsFloat(4);
+	        	float min = m.getArgAsFloat(5);
+    	        for (int i = 0; i < nChannels; i++){
+	        	    if(mySounder[i]->masschange == true){
+                        mySounder[i]->setSuperPitch(command, inc, speed, max, min);
+	        	    }
+	        	}
+				ofLogNotice("osc") << "/masssuperpitch [" << channel << "] command: " <<  command << " inc:" << inc << " speed: " << speed << " max: " << max << " min:" << min << " " << mySounder[channel]->soundfile;
+        	}else{
+				ofLogNotice("osc error") << "/masssuperpitch [" << channel << "] " << "| vars not recognised as: string,float,float";
         	}
         }
 	    // Set the pitch of all channels if the 'masschange' variable has been set to 1
