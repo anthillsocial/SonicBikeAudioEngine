@@ -326,18 +326,22 @@ void ofApp::update(){
         }
         // Set the superPitch of a channel
     	else if(m.getAddress() == "/masssuperpitch"){
-	        if(m.getArgType(1) == OFXOSC_TYPE_STRING && m.getArgType(2)==OFXOSC_TYPE_FLOAT && m.getArgType(3)==OFXOSC_TYPE_FLOAT && m.getArgType(4) == OFXOSC_TYPE_FLOAT && OFXOSC_TYPE_FLOAT && m.getArgType(5) ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
-	        	string command = m.getArgAsString(1);
-	        	float inc = m.getArgAsFloat(2);  
-	        	float speed = m.getArgAsFloat(3);
-	        	float max = m.getArgAsFloat(4);
-	        	float min = m.getArgAsFloat(5);
+	        if(m.getArgType(0)==OFXOSC_TYPE_STRING && 
+	           m.getArgType(1)==OFXOSC_TYPE_FLOAT && 
+	           m.getArgType(2)==OFXOSC_TYPE_FLOAT && 
+	           m.getArgType(3)==OFXOSC_TYPE_FLOAT && 
+	           m.getArgType(4)==OFXOSC_TYPE_FLOAT ){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        	string command = m.getArgAsString(0);
+	        	float inc = m.getArgAsFloat(1);  
+	        	float speed = m.getArgAsFloat(2);
+	        	float max = m.getArgAsFloat(3);
+	        	float min = m.getArgAsFloat(4);
     	        for (int i = 0; i < nChannels; i++){
 	        	    if(mySounder[i]->masschange == true){
                         mySounder[i]->setSuperPitch(command, inc, speed, max, min);
 	        	    }
 	        	}
-				ofLogNotice("osc") << "/masssuperpitch [" << channel << "] command: " <<  command << " inc:" << inc << " speed: " << speed << " max: " << max << " min:" << min << " " << mySounder[channel]->soundfile;
+				ofLogNotice("osc") << "/masssuperpitch command:" <<  command << " inc:" << inc << " speed:" << speed << " max:" << max << " min:" << min << " | " << mySounder[channel]->soundfile;
         	}else{
 				ofLogNotice("osc error") << "/masssuperpitch [" << channel << "] " << "| vars not recognised as: string,float,float";
         	}
