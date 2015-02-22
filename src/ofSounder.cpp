@@ -122,13 +122,13 @@ void ofSounder::load(string newsoundfile, bool stream){
 	if( ! mysound.loadSound(soundfile, stream) ){
         mysound.loadSound(soundfile, stream); 
 	}
-	cout << "Attempted to load: " << soundfile << "\n";
+	//cout << "Attempted to load: " << soundfile << "\n";
 }
 
 void ofSounder::unload(){
 	mysound.unloadSound();
 	state = "none";
-	cout << "Unloaded: " << soundfile << "\n";
+    //	cout << "Unloaded: " << soundfile << "\n";
 }
 
 void ofSounder::play(){

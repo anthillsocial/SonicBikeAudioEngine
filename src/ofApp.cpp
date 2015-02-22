@@ -19,6 +19,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    // Lets set the framerate to something sensible
+    ofSetFrameRate(60);
     // Load and parse the config file
     bool parsingSuccessful = result.open(CONFIG);
     if (parsingSuccessful){
