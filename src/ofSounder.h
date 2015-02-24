@@ -39,7 +39,7 @@ class ofSounder {
         void setLoop(bool loop);
         void setPosition(float pos);
         void setMultiPlay(bool multi);
-        void setMassChange(bool multi);   
+        void setMassChange(bool change, string param);   
         void setSuperLooper(string command, float pos, float len);
         void setSuperPitch(string command, float inc, float speed, float max, float min);
 
@@ -52,7 +52,12 @@ class ofSounder {
         ofSoundPlayer  mysound;
         bool loaded;
         bool masschange;
-		
+        bool masspitch;
+		bool massvolume;
+		bool masssuperlooper;
+		bool masssuperpitch;
+		bool massstartpoint; 
+
 		string faderstate; 
 		float faderfade;
 		float fadervol;

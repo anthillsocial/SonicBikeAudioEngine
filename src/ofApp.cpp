@@ -315,7 +315,7 @@ void ofApp::update(){
 	        	float pos = m.getArgAsFloat(1);
 	        	float len = m.getArgAsFloat(2);
                 for (int i = 0; i < nChannels; i++){
-	        	    if(mySounder[i]->masschange == true){
+	        	    if(mySounder[i]->masssuperlooper == true){
                         mySounder[i]->setSuperLooper(command, pos, len);
 	        	    }
 	        	}
@@ -353,7 +353,7 @@ void ofApp::update(){
 	        	float max = 19.5; //m.getArgAsFloat(3);
 	        	float min = 0.5; //m.getArgAsFloat(4);
     	        for (int i = 0; i < nChannels; i++){
-	        	    if(mySounder[i]->masschange == true){
+	        	    if(mySounder[i]->masssuperpitch == true){
                         mySounder[i]->setSuperPitch(command, inc, speed, max, min);
 	        	    }
 	        	}
@@ -367,7 +367,7 @@ void ofApp::update(){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float pitch = m.getArgAsFloat(0);
 	        	for (int i = 0; i < nChannels; i++){
-	        	    if(mySounder[i]->masschange == true){
+	        	    if(mySounder[i]->masspitch == true){
 						//ofLogNotice("massvchangeTrue:") << i;
                         mySounder[i]->setSpeed(pitch);
 	        	    }
@@ -382,7 +382,7 @@ void ofApp::update(){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float vol = m.getArgAsFloat(0);
 	        	for (int i = 0; i < nChannels; i++){
-	        	    if(mySounder[i]->masschange == true){
+	        	    if(mySounder[i]->massvolume == true){
                         mySounder[i]->setVolume(vol);
 	        	    }
 	        	}
@@ -396,7 +396,7 @@ void ofApp::update(){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float vol = m.getArgAsFloat(0);
 	        	for (int i = 0; i < nChannels; i++){
-	        	    if(mySounder[i]->masschange == true){
+	        	    if(mySounder[i]->massvolume == true){
                         mySounder[i]->setVolume(vol);
 	        	    }
 	        	}
@@ -407,16 +407,18 @@ void ofApp::update(){
         }
         // Can this channel be changed as part of a 'masspitch' or 'massposition' command
     	else if(m.getAddress() == "/masschange"  && channel>=0){
-	        if(m.getArgType(0) == OFXOSC_TYPE_INT32){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
+	        if(m.getArgType(1) == OFXOSC_TYPE_INT32 && m.getArgType(2)==OFXOSC_TYPE_STRING){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	int change = m.getArgAsInt32(1);
+	        	bool changeme = false;
+	        	string param = m.getArgAsString(2);
 	        	if(change==1){
-	        	    mySounder[channel]->setMassChange(true);
-	        	}else{
-                    mySounder[channel]->setMassChange(false);
+	        	    changeme = true;
 	        	}
-				ofLogNotice("osc") << "/masschange [" << channel << "] change: " <<  change;
+	        	// Set the masschange parameter
+	        	mySounder[channel]->setMassChange(changeme, param);
+				ofLogNotice("osc") << "/masschange " << channel << " change:" <<  change << "param:" << param;
         	}else{
-				ofLogNotice("osc error") << "/masschange [" << channel << "] " << "| var 1 not recognised as OFXOSC_TYPE_INT32";
+				ofLogNotice("osc error") << "/masschange [int] [string: pitch,volume,superlooper,superpitch, startpoint]";
         	}
         }
 	    // Set the multiplay of a channel

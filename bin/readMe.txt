@@ -1,3 +1,5 @@
+Note:
+The compiled binary ending in ARM is the version that works with ARM processors
 
 OF linux: 
 

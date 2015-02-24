@@ -20,6 +20,11 @@ ofSounder::ofSounder()
 {   
     // Setup some base variables
     masschange = false;
+    masspitch = false;
+	massvolume = false;
+	masssuperlooper = false;
+	masssuperpitch = false;
+    massstartpoint = false;
     fadervol = 1.0f;
 	mysound.setVolume(fadervol);
     mysound.setMultiPlay(false);
@@ -204,7 +209,18 @@ void ofSounder::setMultiPlay(bool multi){
 	state = "multiplay";  
     mysound.setMultiPlay(multi);   
 }
-void ofSounder::setMassChange(bool change){
-	masschange = change;   
+void ofSounder::setMassChange(bool change, string param){
+    // pitch,volume,superlooper,superpitch, startpoint]";
+    if(param=="pitch"){
+	    masspitch = change; 
+	}else if(param=="volume"){
+        massvolume = change;
+    }else if(param=="superlooper"){
+        masssuperlooper = change;
+    }else if(param=="superpitch"){
+        masssuperpitch = change;
+    }else if(param=="startpoint"){
+        massstartpoint = change; 
+    }
 }
 
