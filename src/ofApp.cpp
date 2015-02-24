@@ -273,6 +273,17 @@ void ofApp::update(){
 	        mySounder[channel]->play();
 			ofLogNotice("osc") << "/loopplay [" << channel << "] (loop then play)" << mySounder[channel]->soundfile;
         }
+        // Set framerate
+    	else if(m.getAddress() == "/setframerate"){
+	        if(m.getArgType(0) == OFXOSC_TYPE_INT32){
+	            int framerate = m.getArgType(0);
+	            ofSetFrameRate(framerate);
+			    ofLogNotice("osc") << "/setframerate [" << framerate;
+            }else{
+                ofLogNotice("oscerror") << "/setframerate [should be int] " ;
+            }
+        }
+
 	    // Set the position of a channel
     	else if(m.getAddress() == "/position" && channel>=0){
 	        if(m.getArgType(1) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
