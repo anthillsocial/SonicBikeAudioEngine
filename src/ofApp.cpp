@@ -105,37 +105,37 @@ void ofApp::update(){
 			ofFile file (soundfile);   
 			if(file.exists()){ 
 				// Check we have enough memory to load it
-				int filesize = file.getSize(); //ofLogNotice("filesize") << filesize;
-				int inc = 0;
-				int free = 0;
-				bool gotfree = false;
+				//int filesize = file.getSize(); //ofLogNotice("filesize") << filesize;
+				//int inc = 0;
+				//int free = 0;
+				//bool gotfree = false;
 				// The system call sometimes doesn't work, so try it a few times
-				while (gotfree==false){
-					free = ofToInt(ofTkSystem("free | grep Mem | awk '{print $4}'")); 
-					ofLogNotice("free") << free;
-					if(inc>10 || free > 0){
-						gotfree = true;
-					}
-					inc++;
-				}
-				float filesizemb = float(filesize)/1000.0/1000.0; //ofLogNotice("filesizemb") << filesizemb;
-				float freemb = float(free)/1000.0; //ofLogNotice("freemb") << freemb;
-				float availmb = freemb-filesizemb; //ofLogNotice("availmb") << availmb;
-				if( (filesizemb*3) > availmb){
-					ofLogNotice("memoryIssue") << "Load as stream. Info (" << freemb << "mb) toLoadFile (" << filesizemb << "mb) | /load [" << channel << "]" << m.getArgAsString(1);
+				//while (gotfree==false){
+				//	free = ofToInt(ofTkSystem("free | grep Mem | awk '{print $4}'")); 
+				//	ofLogNotice("free") << free;
+				//	if(inc>10 || free > 0){
+				//		gotfree = true;
+				//	}
+				//	inc++;
+				//}
+				//float filesizemb = float(filesize)/1000.0/1000.0; //ofLogNotice("filesizemb") << filesizemb;
+				//float freemb = float(free)/1000.0; //ofLogNotice("freemb") << freemb;
+				//float availmb = freemb-filesizemb; //ofLogNotice("availmb") << availmb;
+				//if( (filesizemb*3) > availmb){
+				//	ofLogNotice("memoryIssue") << "Load as stream. Info (" << freemb << "mb) toLoadFile (" << filesizemb << "mb) | /load [" << channel << "]" << m.getArgAsString(1);
 				    // Could try streaming the file?
-				    if(canstream){
-				        mySounder[channel]->load(soundfile, true);
-				    }
-				}else{
+				//    if(canstream){
+				//        mySounder[channel]->load(soundfile, true);
+				//    }
+				//}else{
 					// Silence error TODO: Fix hack where audio class needs to load twice
 					//ofLogNotice("start to load");
-					ofSetLogLevel(OF_LOG_SILENT);
-	        		mySounder[channel]->load(soundfile, false);
-	        		ofSetLogLevel(logLevel);
-					ofLogNotice("mem") 	<< "freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
-				}
-				ofLogNotice("osc") << "/load [" << channel << "] " << m.getArgAsString(1);
+				ofSetLogLevel(OF_LOG_SILENT);
+	        	mySounder[channel]->load(soundfile, false);
+	        	ofSetLogLevel(logLevel);
+				//ofLogNotice("mem") 	<< "freemem: " << freemb << "mb filesize: " << filesizemb << "mb memavail: " << availmb << "mb";
+				//}
+				ofLogNotice("osc") << "/load " << channel << " " << m.getArgAsString(1);
 			}else{
 				ofLogNotice("osc error") << "File doesn't exist \"/load [" << channel << "] " << soundfile; 
 			}
@@ -366,13 +366,15 @@ void ofApp::update(){
     	else if(m.getAddress() == "/masspitch"){
 	        if(m.getArgType(0) == OFXOSC_TYPE_FLOAT){ // OFXOSC_TYPE_INT32 OFXOSC_TYPE_FLOAT OFXOSC_TYPE_STRING
 	        	float pitch = m.getArgAsFloat(0);
+	        	string op = "[";
 	        	for (int i = 0; i < nChannels; i++){
 	        	    if(mySounder[i]->masspitch == true){
 						//ofLogNotice("massvchangeTrue:") << i;
                         mySounder[i]->setSpeed(pitch);
+                        op = op+","+ofToString(i);
 	        	    }
 	        	}
-				ofLogNotice("osc") << "/masspitch " <<  pitch;
+				ofLogNotice("osc") << "/masspitch " <<  pitch << "changed:" << op << "]";
         	}else{
 				ofLogNotice("osc error") << "/masspitch | var 1 not recognised as OFXOSC_TYPE_FLOAT";
         	}
